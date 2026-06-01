@@ -319,14 +319,20 @@ function renderCalendario(){
   const hoy=diaHoy();
   for(let i=0;i<new Date(2026,5,1).getDay();i++){const e=document.createElement('div');e.className='day-cell empty';g.appendChild(e);}
   state.dias.forEach(d=>{
-    const t=TIPOS[d.tipo],desbloqueado=estaDesbloqueado(d.n),esHoy=d.n===hoy,dimmed=state.filtro&&state.filtro!==d.tipo;
+    const t=TIPOS[d.tipo],desbloqueado=estaDesbloqueado(d.n),esHoy=d.n===hoy;
+    // Filtro: si hay filtro activo, días que no coinciden se ocultan
+    // Días bloqueados que coinciden con filtro: se muestran como bloqueados (no revelan contenido)
+    const filtroActivo=state.filtro!==null;
+    const coincideFiltro=!filtroActivo||state.filtro===d.tipo;
+    const dimmed=filtroActivo&&!coincideFiltro;
     const cell=document.createElement('div');
     let cls='day-cell '+(desbloqueado?'unlocked':'locked');
     if(d.n===30&&desbloqueado)cls+=' cumple';
     if(d.done)cls+=' done';if(esHoy&&!d.done)cls+=' hoy';if(dimmed)cls+=' dimmed';
     cell.className=cls;
-    if(desbloqueado){cell.style.borderColor=t.color+'55';cell.style.background=d.done?t.bg:'white';}
+    if(desbloqueado&&coincideFiltro){cell.style.borderColor=t.color+'55';cell.style.background=d.done?t.bg:'white';}
     let inner=`<span class="day-num-cell">${d.n}</span>`;
+    // Días bloqueados siempre muestran candado, nunca el emoji/título del tipo
     if(!desbloqueado)inner+=`<span class="lock-icon">🔒</span>`;
     else{inner+=`<span class="day-icon-cell">${t.icon}</span><span class="day-label-cell">${d.titulo}</span>`;}
     if(d.done)inner+=`<div class="done-check">✓</div>`;
