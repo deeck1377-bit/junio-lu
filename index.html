@@ -116,6 +116,25 @@ body{font-family:'DM Sans',sans-serif;background:var(--papel);color:var(--tinta)
 .admin-fab{width:44px;height:44px;border-radius:50%;background:var(--tinta);color:white;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.2);transition:transform .15s}
 .admin-fab:hover{transform:scale(1.08)}
 @media(max-width:480px){.topbar-stat{display:none}.cal-wrap{padding:.75rem .5rem 3rem}.day-label-cell{display:none}.portada-reglas{padding:1.5rem}}
+
+/* CONFETTI */
+#confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;}
+/* OSCAR BUTTON */
+.oscar-btn{background:linear-gradient(135deg,var(--rosa),#c0507a);color:white;border:none;padding:8px 16px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:transform .15s,opacity .15s;display:flex;align-items:center;gap:6px;}
+.oscar-btn:hover{transform:translateY(-1px);opacity:.9;}
+.oscar-bubble{display:none;background:white;border:.5px solid var(--rosa-medio);border-radius:14px;padding:12px 16px;margin:0 1.5rem 1rem;font-size:13px;color:var(--tinta);line-height:1.6;font-style:italic;text-align:center;position:relative;animation:bubbleIn .25s ease;}
+.oscar-bubble.show{display:block;}
+@keyframes bubbleIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.oscar-bubble::before{content:'💭';position:absolute;top:-12px;left:50%;transform:translateX(-50%);font-size:18px;}
+/* FOUND CELEBRATION */
+.found-overlay{display:none;position:fixed;inset:0;background:rgba(26,16,20,.6);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.found-overlay.show{display:flex;}
+.found-card{background:white;border-radius:24px;padding:2.5rem 2rem;text-align:center;max-width:320px;width:90%;animation:foundPop .3s cubic-bezier(.34,1.56,.64,1);}
+@keyframes foundPop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+.found-emoji{font-size:52px;margin-bottom:12px;}
+.found-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:400;color:var(--tinta);margin-bottom:8px;}
+.found-msg{font-size:13px;color:var(--gris);line-height:1.6;margin-bottom:1.5rem;}
+.found-close{background:var(--tinta);color:white;border:none;padding:10px 28px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -186,7 +205,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--papel);color:var(--tinta)
       </div>
       <div class="modal-actions">
         <button class="act-btn" id="lu-done-btn" onclick="toggleDone()"></button>
+        <button class="oscar-btn" onclick="pensarOscar()">💭 ¿Qué piensa Oscar?</button>
       </div>
+      <div class="oscar-bubble" id="oscar-bubble"></div>
     </div>
     <div id="view-admin" style="display:none">
       <div class="modal-body">
@@ -392,6 +413,142 @@ function guardarTodo(){
   document.getElementById('pista-edit-wrap').classList.remove('open');
 }
 document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+
+// ─── PENSAMIENTOS DE OSCAR ───
+const PENSAMIENTOS = [
+  "En este momento estoy pensando en cómo te ves cuando te ríes sin querer.",
+  "Estoy pensando que ojalá puedas sentir lo mucho que te quiero a través de la pantalla.",
+  "Estoy pensando en la primera vez que me di cuenta que me gustabas.",
+  "Pienso que eres la persona más bonita que conozco, por dentro y por fuera.",
+  "Estoy pensando en que me alegra cada día que estás en mi vida.",
+  "En este momento pienso: qué suerte la mía.",
+  "Estoy pensando en cómo hueles cuando te abrazo.",
+  "Pienso que no sé cómo era mi vida antes de ti, y tampoco quiero saberlo.",
+  "Estoy pensando que te mereces todo lo bueno del mundo, y más.",
+  "Pienso en tu cara cuando algo te da mucho gusto — es mi favorita.",
+  "Estoy pensando en que ojalá este mes te haga sentir lo especial que eres.",
+  "Pienso que me enamoro otra vez cada vez que me cuentas algo con emoción.",
+  "Estoy pensando en ti. Así de simple.",
+  "Pienso que el mejor momento de mi día es cuando estás cerca.",
+  "Estoy pensando en lo orgulloso que me pones con todo lo que haces.",
+  "Pienso que te quiero hoy más que ayer, y menos que mañana.",
+  "Estoy pensando en darte un abrazo muy largo cuando te vea.",
+  "Pienso que junio es poco para decirte todo lo que siento.",
+  "Estoy pensando que elegirte fue la mejor decisión que he tomado.",
+  "Pienso en ti. Siempre. Todo el tiempo. Ahorita también.",
+];
+
+let lastPensamiento = -1;
+function pensarOscar() {
+  let idx;
+  do { idx = Math.floor(Math.random() * PENSAMIENTOS.length); } while (idx === lastPensamiento);
+  lastPensamiento = idx;
+  const bubble = document.getElementById('oscar-bubble');
+  bubble.textContent = PENSAMIENTOS[idx];
+  bubble.classList.remove('show');
+  void bubble.offsetWidth;
+  bubble.classList.add('show');
+}
+
+// ─── FOUND MESSAGES ───
+const FOUND_MSGS = [
+  "Sabía que lo ibas a encontrar. 💌",
+  "¡Eso! Siempre encuentras lo que buscas. ✨",
+  "Te lo mereces todo, Lu. Todo. 🌸",
+  "Otro día, otro detalle tuyo. 🍫",
+  "Así es junio — tuyo, completamente tuyo. 🎀",
+  "Me alegra tanto que hayas encontrado esto. 💛",
+  "¡Sigue buscando mañana! 🔍",
+  "Cada cosa que encuentras la puse pensando en ti. 🌷",
+];
+
+function closeFound() {
+  document.getElementById('found-overlay').classList.remove('show');
+}
+
+// ─── CONFETTI ───
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const colors = ['#D4537E','#F4C0D1','#BA7517','#FAC775','#3B6D11','#A8D88A','#534AB7','#C5C2F5','#FAEEDA'];
+  const shapes = ['●','★','♥','✦','◆'];
+  const particles = Array.from({length: 120}, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height - canvas.height,
+    r: Math.random() * 8 + 4,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    shape: shapes[Math.floor(Math.random() * shapes.length)],
+    speed: Math.random() * 4 + 2,
+    swing: Math.random() * 3 - 1.5,
+    angle: Math.random() * 360,
+    spin: Math.random() * 6 - 3,
+    opacity: 1,
+  }));
+
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.y += p.speed;
+      p.x += p.swing;
+      p.angle += p.spin;
+      if (frame > 80) p.opacity -= 0.015;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.opacity);
+      ctx.font = `${p.r * 2}px serif`;
+      ctx.fillStyle = p.color;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle * Math.PI / 180);
+      ctx.fillText(p.shape, 0, 0);
+      ctx.restore();
+    });
+    frame++;
+    if (frame < 140) requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  draw();
+}
+
+// ─── OVERRIDE toggleDone to add celebration ───
+const _originalToggleDone = toggleDone;
+function toggleDone() {
+  const d = state.dias.find(x => x.n === state.current);
+  const wasNotDone = !d.done;
+  d.done = !d.done;
+  guardarDatos();
+  renderCalendario();
+  abrirModal(state.current);
+
+  if (wasNotDone) {
+    // Show celebration
+    launchConfetti();
+    const msgs = FOUND_MSGS;
+    const msg = msgs[Math.floor(Math.random() * msgs.length)];
+    const t = TIPOS[d.tipo];
+    document.getElementById('found-emoji').textContent = t.icon;
+    document.getElementById('found-title').textContent = '¡Lo encontraste! ' + t.icon;
+    document.getElementById('found-msg').textContent = msg;
+    document.getElementById('found-overlay').classList.add('show');
+    closeModal();
+  }
+}
+
 </script>
+
+<canvas id="confetti-canvas"></canvas>
+
+<div class="found-overlay" id="found-overlay">
+  <div class="found-card">
+    <div class="found-emoji" id="found-emoji">🎉</div>
+    <div class="found-title" id="found-title">¡Lo encontraste!</div>
+    <div class="found-msg" id="found-msg"></div>
+    <button class="found-close" onclick="closeFound()">Seguir ✨</button>
+  </div>
+</div>
+
 </body>
 </html>
