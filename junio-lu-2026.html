@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Junio para Lu ✦</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rosa: #D4537E;
+  --rosa-claro: #FBEAF0;
+  --rosa-medio: #F4C0D1;
+  --dorado: #BA7517;
+  --dorado-claro: #FAEEDA;
+  --verde: #3B6D11;
+  --verde-claro: #EAF3DE;
+  --morado: #534AB7;
+  --morado-claro: #EEEDFE;
+  --azul: #185FA5;
+  --azul-claro: #E6F1FB;
+  --coral: #993C1D;
+  --coral-claro: #FAECE7;
+  --tinta: #1A1014;
+  --papel: #FDF8F4;
+  --papel-oscuro: #F0E8E0;
+  --gris: #8A7F7A;
+  --gris-claro: #EDE8E4;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--papel);
+  color: var(--tinta);
+  min-height: 100vh;
+}
+
+/* PORTADA */
+.portada {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.portada::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse 60% 50% at 20% 20%, #F4C0D133 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 80% 80%, #FAC77533 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, #EAF3DE22 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.portada-tag {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rosa);
+  border: 0.5px solid var(--rosa-medio);
+  padding: 5px 16px;
+  border-radius: 99px;
+  margin-bottom: 2rem;
+  background: var(--rosa-claro);
+}
+
+.portada h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(48px, 10vw, 88px);
+  font-weight: 400;
+  line-height: 1.05;
+  color: var(--tinta);
+  margin-bottom: 0.5rem;
+}
+
+.portada h1 em {
+  font-style: italic;
+  color: var(--rosa);
+}
+
+.portada-sub {
+  font-size: 15px;
+  color: var(--gris);
+  font-weight: 300;
+  margin-bottom: 3rem;
+  letter-spacing: 0.03em;
+}
+
+.portada-reglas {
+  background: white;
+  border: 0.5px solid var(--papel-oscuro);
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  max-width: 440px;
+  text-align: left;
+  box-shadow: 0 2px 24px rgba(0,0,0,0.04);
+  position: relative;
+}
+
+.portada-reglas::before {
+  content: 'Las reglas del juego';
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--gris);
+  position: absolute;
+  top: -10px;
+  left: 24px;
+  background: white;
+  padding: 0 8px;
+}
+
+.regla {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 0.5px dashed var(--papel-oscuro);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--tinta);
+}
+.regla:last-child { border-bottom: none; }
+
+.regla-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--rosa);
+  line-height: 1;
+  flex-shrink: 0;
+  width: 22px;
+  padding-top: 1px;
+}
+
+.portada-cta {
+  margin-top: 2.5rem;
+  display: flex;
+  gap: 12px;
+}
+
+.btn-primary {
+  background: var(--tinta);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 99px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: transform 0.15s, opacity 0.15s;
+}
+.btn-primary:hover { transform: translateY(-1px); opacity: 0.88; }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--tinta);
+  border: 0.5px solid var(--gris-claro);
+  padding: 12px 24px;
+  border-radius: 99px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-secondary:hover { background: var(--papel-oscuro); }
+
+/* MAIN APP */
+.app { display: none; padding: 0; }
+.app.visible { display: block; }
+
+/* TOP BAR */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 0.5px solid var(--papel-oscuro);
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.topbar-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--tinta);
+}
+
+.topbar-stats {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.stat-pill {
+  font-size: 12px;
+  color: var(--gris);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.stat-pill strong {
+  color: var(--tinta);
+  font-weight: 500;
+}
+
+.topbar-btn {
+  font-size: 12px;
+  padding: 5px 14px;
+  border-radius: 99px;
+  border: 0.5px solid var(--gris-claro);
+  background: transparent;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--tinta);
+  transition: background 0.12s;
+}
+.topbar-btn:hover { background: var(--papel-oscuro); }
+
+/* BARRA DE PROGRESO */
+.progress-bar-wrap {
+  padding: 1rem 1.5rem 0.5rem;
+  background: white;
+}
+.progress-track {
+  height: 4px;
+  background: var(--papel-oscuro);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--rosa), var(--dorado));
+  border-radius: 99px;
+  transition: width 0.5s ease;
+}
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--gris);
+  margin-top: 6px;
+}
+
+/* LEYENDA */
+.legend-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0.75rem 1.5rem;
+  background: white;
+  border-bottom: 0.5px solid var(--papel-oscuro);
+}
+.leg-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--gris);
+  padding: 4px 10px;
+  border-radius: 99px;
+  border: 0.5px solid var(--gris-claro);
+  cursor: pointer;
+  transition: all 0.12s;
+  background: transparent;
+  font-family: 'DM Sans', sans-serif;
+}
+.leg-chip.active {
+  color: var(--tinta);
+  border-color: var(--tinta);
+  background: var(--papel-oscuro);
+}
+.leg-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+/* CALENDARIO */
+.cal-wrap { padding: 1rem 1.5rem 2rem; }
+
+.cal-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 4px;
+}
+.cal-wday {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--gris);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 0;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.day-cell {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  border: 0.5px solid transparent;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  transition: transform 0.12s, box-shadow 0.12s;
+  overflow: hidden;
+}
+
+.day-cell:hover {
+  transform: scale(1.06);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  z-index: 2;
+}
+
+.day-cell.empty { background: transparent; border-color: transparent; cursor: default; }
+.day-cell.empty:hover { transform: none; box-shadow: none; }
+
+.day-cell.dimmed { opacity: 0.35; }
+
+.day-cell.cumple {
+  border: 2px solid var(--dorado) !important;
+  background: var(--dorado-claro) !important;
+}
+
+.day-cell.done::after {
+  content: '✓';
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--verde);
+}
+
+.day-cell.pista-activa {
+  animation: pista-pulse 2s ease-in-out infinite;
+}
+@keyframes pista-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212,83,126,0); }
+  50% { box-shadow: 0 0 0 6px rgba(212,83,126,0.18); }
+}
+
+.day-num-cell {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--tinta);
+  line-height: 1;
+}
+.day-icon-cell { font-size: 18px; }
+.day-label-cell {
+  font-size: 7.5px;
+  color: var(--gris);
+  text-align: center;
+  line-height: 1.2;
+  padding: 0 2px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* MODAL */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(26,16,20,0.5);
+  z-index: 100;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  overflow-y: auto;
+  backdrop-filter: blur(2px);
+}
+.modal-overlay.open { display: flex; }
+
+.modal-card {
+  background: var(--papel);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  overflow: hidden;
+  margin-top: 2rem;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.16);
+  animation: slideUp 0.22s ease;
+}
+@keyframes slideUp { from { transform: translateY(20px); opacity:0; } to { transform: translateY(0); opacity:1; } }
+
+.modal-header {
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 0.5px solid var(--papel-oscuro);
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 0.5px solid var(--gris-claro);
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--gris);
+  transition: background 0.12s;
+}
+.modal-close:hover { background: var(--papel-oscuro); }
+
+.modal-tipo-badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 99px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.modal-fecha {
+  font-size: 12px;
+  color: var(--gris);
+  font-style: italic;
+  margin-bottom: 4px;
+}
+
+.modal-titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--tinta);
+  line-height: 1.25;
+}
+
+.modal-body { padding: 1.25rem 1.5rem; }
+
+.modal-desc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--tinta);
+  margin-bottom: 14px;
+}
+
+/* PISTA BOX */
+.pista-box {
+  background: white;
+  border: 0.5px dashed var(--rosa-medio);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 14px;
+  position: relative;
+}
+.pista-box::before {
+  content: '📍 Pista para Lu';
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rosa);
+  position: absolute;
+  top: -8px;
+  left: 14px;
+  background: white;
+  padding: 0 6px;
+}
+.pista-text {
+  font-size: 13px;
+  color: var(--tinta);
+  line-height: 1.6;
+  font-style: italic;
+  white-space: pre-line;
+}
+.pista-text.placeholder {
+  color: var(--gris);
+  font-style: normal;
+  font-size: 12px;
+}
+.pista-edit-area {
+  display: none;
+  margin-top: 10px;
+}
+.pista-edit-area.open { display: block; }
+.pista-edit-area textarea {
+  width: 100%;
+  font-size: 13px;
+  font-style: italic;
+  font-family: 'DM Sans', sans-serif;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 0.5px solid var(--rosa-medio);
+  background: var(--rosa-claro);
+  color: var(--tinta);
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.6;
+}
+
+/* TIP BOX */
+.tip-box {
+  background: var(--papel-oscuro);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--gris);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+/* EDIT AREA */
+.edit-section { display: none; border-top: 0.5px solid var(--papel-oscuro); padding: 1rem 1.5rem; }
+.edit-section.open { display: block; }
+.edit-label { font-size: 11px; font-weight: 500; color: var(--gris); margin-bottom: 5px; margin-top: 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.edit-label:first-child { margin-top: 0; }
+.edit-section input, .edit-section textarea {
+  width: 100%;
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 0.5px solid var(--gris-claro);
+  background: white;
+  color: var(--tinta);
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.5;
+}
+.edit-section textarea { resize: vertical; min-height: 70px; }
+
+/* ACCIONES */
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  padding: 0 1.5rem 1.5rem;
+  flex-wrap: wrap;
+}
+
+.act-btn {
+  font-size: 12px;
+  padding: 7px 14px;
+  border-radius: 99px;
+  border: 0.5px solid var(--gris-claro);
+  background: white;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--tinta);
+  transition: all 0.12s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.act-btn:hover { background: var(--papel-oscuro); }
+.act-btn.done-active { border-color: var(--verde); color: var(--verde); background: var(--verde-claro); }
+.act-btn.primary { background: var(--tinta); color: white; border-color: var(--tinta); }
+.act-btn.primary:hover { opacity: 0.85; }
+
+/* HORA BANNER */
+.hora-banner {
+  background: var(--tinta);
+  color: white;
+  text-align: center;
+  padding: 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.hora-banner strong { color: var(--rosa-medio); }
+
+/* RESPONSIVE */
+@media (max-width: 500px) {
+  .portada-reglas { padding: 1.5rem; }
+  .cal-wrap { padding: 1rem; }
+  .topbar-stats { display: none; }
+  .day-label-cell { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="portada" id="portada">
+  <div class="portada-tag">✦ Junio 2026</div>
+  <h1>Para <em>Lu</em></h1>
+  <p class="portada-sub">30 días · 30 detalles · 1 año · 28 años</p>
+
+  <div class="portada-reglas">
+    <div class="regla">
+      <span class="regla-num">1</span>
+      <span>Cada día hay algo esperándote. Puede estar cerca, puede estar escondido — búscalo con los ojos abiertos desde que amanece.</span>
+    </div>
+    <div class="regla">
+      <span class="regla-num">2</span>
+      <span>Tienes hasta las <strong>9pm</strong> para encontrarlo. Si hay un papelito con pistas, síguelo.</span>
+    </div>
+    <div class="regla">
+      <span class="regla-num">3</span>
+      <span>Aunque el día esté raro — aunque estemos peleados — lo tuyo estará ahí igual.</span>
+    </div>
+    <div class="regla">
+      <span class="regla-num">4</span>
+      <span>Si a las <strong>9pm</strong> no lo encontraste, a las <strong>10pm exactas</strong> puedes preguntar qué era. Solo a esa hora. No antes.</span>
+    </div>
+    <div class="regla">
+      <span class="regla-num">5</span>
+      <span>No hay trampa posible. Cada día tiene su lógica. Confía en las pistas.</span>
+    </div>
+  </div>
+
+  <div class="portada-cta">
+    <button class="btn-primary" onclick="entrar()">Abrir el calendario →</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app">
+  <div class="hora-banner">
+    Regla de oro: búscalo antes de las <strong>9pm</strong> · Si no lo encontraste, a las <strong>10pm exactas</strong> puedes preguntar
+  </div>
+
+  <div class="topbar">
+    <span class="topbar-title">Junio para Lu ✦</span>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div class="topbar-stats">
+        <span class="stat-pill">Encontrados: <strong id="stat-done">0</strong>/30</span>
+      </div>
+      <button class="topbar-btn" onclick="verPortada()">Reglas</button>
+    </div>
+  </div>
+
+  <div class="progress-bar-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="progress-label"><span>1 jun</span><span id="prog-label">0 de 30</span><span>30 jun 🎂</span></div>
+  </div>
+
+  <div class="legend-wrap" id="legend-wrap"></div>
+
+  <div class="cal-wrap">
+    <div class="cal-header">
+      <div class="cal-wday">Dom</div>
+      <div class="cal-wday">Lun</div>
+      <div class="cal-wday">Mar</div>
+      <div class="cal-wday">Mié</div>
+      <div class="cal-wday">Jue</div>
+      <div class="cal-wday">Vie</div>
+      <div class="cal-wday">Sáb</div>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-card">
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-fecha" id="m-fecha"></div>
+      <span class="modal-tipo-badge" id="m-tipo"></span>
+      <div class="modal-titulo" id="m-titulo"></div>
+    </div>
+
+    <div class="modal-body">
+      <p class="modal-desc" id="m-desc"></p>
+
+      <div class="pista-box" id="pista-box">
+        <div class="pista-text" id="pista-text"></div>
+        <div class="pista-edit-area" id="pista-edit-area">
+          <textarea id="pista-input" placeholder="Escribe la pista que dejarás para Lu ese día...&#10;&#10;Ejemplo: 'Busca donde guardamos los secretos del día a día... el lugar que visitas dos veces al despertar'"></textarea>
+        </div>
+      </div>
+
+      <div class="tip-box" id="m-tip"></div>
+    </div>
+
+    <div class="edit-section" id="edit-section">
+      <div class="edit-label">Título del día</div>
+      <input type="text" id="edit-titulo" placeholder="Título">
+      <div class="edit-label">Descripción (solo para ti)</div>
+      <textarea id="edit-desc" placeholder="¿Qué planeas hacer este día?"></textarea>
+      <div class="edit-label">Nota privada / tip</div>
+      <textarea id="edit-tip" placeholder="Recordatorio para ti" style="min-height:50px"></textarea>
+    </div>
+
+    <div class="modal-actions">
+      <button class="act-btn" id="done-btn" onclick="toggleDone()"></button>
+      <button class="act-btn" onclick="togglePistaEdit()" id="pista-btn">📍 Editar pista</button>
+      <button class="act-btn" onclick="toggleEdit()">✏️ Editar día</button>
+      <button class="act-btn primary" onclick="guardarTodo()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const KEY = 'junio_lu_2026_pro_v1';
+
+const TIPOS = {
+  carta:     { label:'Carta / nota',       color:'#D4537E', bg:'#FBEAF0', icon:'💌' },
+  chocolate: { label:'Chocolate / dulce',  color:'#BA7517', bg:'#FAEEDA', icon:'🍫' },
+  flor:      { label:'Flor / naturaleza',  color:'#3B6D11', bg:'#EAF3DE', icon:'🌸' },
+  actividad: { label:'Actividad / reto',   color:'#534AB7', bg:'#EEEDFE', icon:'✨' },
+  cuaderno:  { label:'Cuaderno / escribe', color:'#185FA5', bg:'#E6F1FB', icon:'📓' },
+  vela:      { label:'Vela / ambiente',    color:'#993C1D', bg:'#FAECE7', icon:'🕯️' },
+  intimo:    { label:'Momento íntimo',     color:'#993556', bg:'#FBEAF0', icon:'🌙' },
+  especial:  { label:'Día especial',       color:'#BA7517', bg:'#FAEEDA', icon:'🎂' },
+};
+
+const BASE = [
+  {n:1,  tipo:'carta',     titulo:'Carta de apertura',     desc:'Escríbele la carta a mano explicando que junio es SU mes. Que preste atención a cada detalle del día.',              tip:'💡 Sobre sellado con su nombre. Esta carta abre el juego.'},
+  {n:2,  tipo:'actividad', titulo:'Trivia de los dos',      desc:'5 preguntas fáciles sobre ustedes en un papelito. Algo rápido antes de que entre a estudiar.',                      tip:'💡 Martes — algo corto y sonriente, sin que le quite tiempo.'},
+  {n:3,  tipo:'chocolate', titulo:'El primer chocolate',    desc:'Primer chocolate. Papelito: "1 de 8". Que sepa que hay más esperándola.',                                            tip:'💡 Esconde el chocolate con una pista que lo lleve hasta él.'},
+  {n:4,  tipo:'flor',      titulo:'Florecita del camino',   desc:'Una florcita o algo de naturaleza que encuentres. Sin explicación, solo porque sí.',                                 tip:'💡 Jueves ligero — gesto pequeño que no necesita respuesta.'},
+  {n:5,  tipo:'actividad', titulo:'Playlist sorpresa',      desc:'Una playlist armada para ella. Escríbele en un papel el nombre y por qué elegiste 2-3 canciones.',                  tip:'💡 Viernes — que la escuche en el finde. Ponle un nombre bonito.'},
+  {n:6,  tipo:'cuaderno',  titulo:'El cuaderno de Lu',      desc:'Dale el cuaderno. Primera página escrita por ti. Las siguientes con instrucciones de qué anotar cada semana.',       tip:'💡 Sábado perfecto. Ponle: "Junio 2026 — el año que cumplí 28"'},
+  {n:7,  tipo:'intimo',    titulo:'Domingo de ustedes',     desc:'Domingo sin pendientes. Cocinen juntos, película en casa. Vela encendida. Noche lenta y sensorial.',                 tip:'💡 Domingos son para los dos. Este sin teléfonos.'},
+  {n:8,  tipo:'carta',     titulo:'Nota en su bolsillo',    desc:'Una nota doblada en su bolsa o mochila. Que la encuentre sola durante el día.',                                      tip:'💡 "Hoy pensé en ti y quise que lo supieras."'},
+  {n:9,  tipo:'actividad', titulo:'Reto: escríbeme algo',  desc:'Un papel con: "Escribe 5 cosas que quieres que hagamos antes de que cumplas 29." Sin presión.',                      tip:'💡 Martes ligero. Guarda esa lista para el resto del año.'},
+  {n:10, tipo:'chocolate', titulo:'Chocolate #2',           desc:'Segundo chocolate con algo específico que te gusta de ella. Concreto y honesto.',                                    tip:'💡 "Me encanta como te ríes cuando algo te da pena ajena."'},
+  {n:11, tipo:'flor',      titulo:'Flores en casa',         desc:'Varias florecitas pequeñas en un vasito de vidrio en un lugar donde las vea al llegar.',                             tip:'💡 Jueves — llegar a casa y encontrar flores es perfecto.'},
+  {n:12, tipo:'carta',     titulo:'Carta: 10 razones',      desc:'Lista a mano: 10 razones por las que te alegra que ella exista. Honesta, no poética.',                              tip:'💡 Tachado y reescrito se vale — eso lo hace más tuyo.'},
+  {n:13, tipo:'cuaderno',  titulo:'Tarea del cuaderno #1',  desc:'Nota en su cuaderno: que escriba su memoria favorita de este primer año juntos.',                                    tip:'💡 Dile que no te la cuente todavía. Que la guarde ahí.'},
+  {n:14, tipo:'intimo',    titulo:'Sábado de vela',         desc:'Cena en casa, velas, música, sin teléfonos. Noche lenta y sensorial solo para los dos.',                            tip:'💡 No necesita ser elaborado. La vela y la intención lo hacen todo.'},
+  {n:15, tipo:'carta',     titulo:'Mitad del mes',          desc:'"Ya vamos a la mitad del mes y quiero que sepas que..." Un checkpoint de lo que sientes.',                          tip:'💡 Servilleta, post-it, lo que sea. El gesto es lo que cuenta.'},
+  {n:16, tipo:'chocolate', titulo:'Chocolate #3',           desc:'Tercer chocolate con una pregunta: "¿Qué es lo que más te gusta de nosotros?"',                                     tip:'💡 No la presiones a contestar. Quizás lo escribe en su cuaderno.'},
+  {n:17, tipo:'actividad', titulo:'Dibújame algo',          desc:'Un papel en blanco: que dibuje algo que represente este año. Garabato vale.',                                        tip:'💡 Tú también haz el tuyo. Compárenlos. Guárdenlos.'},
+  {n:18, tipo:'flor',      titulo:'Flor con dedicatoria',   desc:'Una flor con papel: "Esta flor durará poco. Tú te quedas para siempre."',                                           tip:'💡 Miércoles — cursi está permitido en junio.'},
+  {n:19, tipo:'cuaderno',  titulo:'Tarea del cuaderno #2',  desc:'Que escriba en su cuaderno: 3 cosas que quiere lograr antes de cumplir 29.',                                        tip:'💡 Dile que la acompañas en al menos una de ellas.'},
+  {n:20, tipo:'intimo',    titulo:'Sábado íntimo',          desc:'Noche especial para los dos. Música, velas, tiempo sin prisa. Sorpréndela con algo que sabes que le gusta.',        tip:'💡 Sábado libre — el mejor día para este tipo de detalle.'},
+  {n:21, tipo:'carta',     titulo:'Nota de gratitud',       desc:'"Gracias por este año. Gracias por ser tú. Gracias por elegirme." Sin más.',                                        tip:'💡 Lo más simple es lo que más pesa. Lunes, para empezar bien.'},
+  {n:22, tipo:'chocolate', titulo:'Chocolate #4',           desc:'Cuarto chocolate. Papel: "Faltan 8 días para que el mundo celebre 28 años de ti."',                                 tip:'💡 La cuenta regresiva informal empieza.'},
+  {n:23, tipo:'actividad', titulo:'Reto: fotos juntos',     desc:'Pídele 3 fotos juntos en distintos momentos del día. Naturales, sin poses.',                                        tip:'💡 Al final del mes imprímelas o arma algo con ellas.'},
+  {n:24, tipo:'flor',      titulo:'Miércoles de flores',    desc:'Una flor o algo de naturaleza bonita. Sin contexto, solo porque sí.',                                               tip:'💡 El hábito de los pequeños detalles es el regalo más grande.'},
+  {n:25, tipo:'intimo',    titulo:'Noche de espera',        desc:'Jueves de estudio. Que cuando llegue encuentre algo rico para comer, una nota, algo que diga que la esperabas.',    tip:'💡 Después de estudiar, llegar a algo bonito lo cambia todo.'},
+  {n:26, tipo:'chocolate', titulo:'Chocolate #5',           desc:'Quinto chocolate. Papel: "Faltan 4 días para celebrar 28 años de ti."',                                             tip:'💡 Viernes — empieza el fin de semana con dulce y cuenta regresiva.'},
+  {n:27, tipo:'actividad', titulo:'Papelito: lo que veo',   desc:'Sábado. Un papel sobre lo que ves en ella que quizás ella no ve. Específico y concreto.',                          tip:'💡 Una sola cosa bien dicha vale más que diez genéricas.'},
+  {n:28, tipo:'carta',     titulo:'Carta al futuro',        desc:'Carta para la Lu de dentro de un año. Sobre sellado: "Ábrela el 30 de junio de 2027."',                            tip:'💡 Puede guardarse en su cuaderno o en un cajón especial.'},
+  {n:29, tipo:'vela',      titulo:'La víspera',             desc:'Domingo antes del gran día. Cenan juntos, vela encendida. Papel: "Mañana el mundo recibe 28 años de ti."',         tip:'💡 En casa, sin necesidad de ser caro.'},
+  {n:30, tipo:'especial',  titulo:'¡Feliz cumpleaños, Lu!', desc:'El día grande. Carta de cumpleaños + carta de aniversario (1 año juntos!). Último chocolate con lazo.',             tip:'💡 Este es el día para la carta más larga y honesta. Todo el mes fue el preámbulo.'},
+];
+
+function cargarDatos() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) {
+      const saved = JSON.parse(raw);
+      return BASE.map(b => ({ ...b, ...(saved.find(s => s.n === b.n) || {}), n: b.n }));
+    }
+  } catch(e) {}
+  return BASE.map(b => ({ ...b }));
+}
+
+function guardarDatos() {
+  try { localStorage.setItem(KEY, JSON.stringify(state.dias)); } catch(e) {}
+}
+
+const state = { dias: cargarDatos(), current: null, filtro: null };
+
+// ─── PORTADA ───
+function entrar() {
+  document.getElementById('portada').style.display = 'none';
+  document.getElementById('app').classList.add('visible');
+  renderLeyenda();
+  renderCalendario();
+}
+function verPortada() {
+  closeModal();
+  document.getElementById('portada').style.display = 'flex';
+  document.getElementById('app').classList.remove('visible');
+}
+
+// ─── LEYENDA ───
+function renderLeyenda() {
+  const wrap = document.getElementById('legend-wrap');
+  wrap.innerHTML = '';
+  Object.entries(TIPOS).forEach(([k, t]) => {
+    const chip = document.createElement('button');
+    chip.className = 'leg-chip' + (state.filtro === k ? ' active' : '');
+    chip.innerHTML = `<span class="leg-dot" style="background:${t.color}"></span>${t.icon} ${t.label}`;
+    chip.onclick = () => { state.filtro = state.filtro === k ? null : k; renderCalendario(); renderLeyenda(); };
+    wrap.appendChild(chip);
+  });
+}
+
+// ─── CALENDARIO ───
+function renderCalendario() {
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+  const done = state.dias.filter(d => d.done).length;
+  document.getElementById('stat-done').textContent = done;
+  document.getElementById('progress-fill').style.width = (done / 30 * 100) + '%';
+  document.getElementById('prog-label').textContent = done + ' de 30';
+
+  const primerDia = new Date(2026, 5, 1).getDay();
+  for (let i = 0; i < primerDia; i++) {
+    const e = document.createElement('div');
+    e.className = 'day-cell empty';
+    grid.appendChild(e);
+  }
+
+  state.dias.forEach(d => {
+    const t = TIPOS[d.tipo];
+    const cell = document.createElement('div');
+    const dimmed = state.filtro && state.filtro !== d.tipo;
+    const hoy = new Date(); const fechaDia = new Date(2026, 5, d.n);
+    const esHoy = hoy.getFullYear()===2026 && hoy.getMonth()===5 && hoy.getDate()===d.n;
+    cell.className = 'day-cell' +
+      (d.n === 30 ? ' cumple' : '') +
+      (d.done ? ' done' : '') +
+      (dimmed ? ' dimmed' : '') +
+      (esHoy && !d.done ? ' pista-activa' : '');
+    cell.style.borderColor = t.color + '44';
+    cell.style.background = d.done ? t.bg : 'white';
+    cell.innerHTML = `<span class="day-num-cell">${d.n}</span><span class="day-icon-cell">${t.icon}</span><span class="day-label-cell">${d.titulo}</span>`;
+    cell.onclick = () => abrirModal(d.n);
+    grid.appendChild(cell);
+  });
+}
+
+// ─── MODAL ───
+const DIAS_SEM = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+
+function abrirModal(n) {
+  const d = state.dias.find(x => x.n === n);
+  state.current = n;
+  const t = TIPOS[d.tipo];
+  const fecha = new Date(2026, 5, n);
+
+  document.getElementById('m-fecha').textContent = DIAS_SEM[fecha.getDay()] + ' ' + n + ' de junio, 2026';
+
+  const badge = document.getElementById('m-tipo');
+  badge.textContent = t.icon + ' ' + t.label;
+  badge.style.background = t.bg;
+  badge.style.color = t.color;
+
+  document.getElementById('m-titulo').textContent = d.titulo;
+  document.getElementById('m-desc').textContent = d.desc;
+  document.getElementById('m-tip').textContent = d.tip;
+
+  // pista
+  const pistaText = document.getElementById('pista-text');
+  if (d.pista) {
+    pistaText.textContent = d.pista;
+    pistaText.classList.remove('placeholder');
+  } else {
+    pistaText.textContent = 'Aún no has escrito la pista para este día. Toca "Editar pista" para agregarla.';
+    pistaText.classList.add('placeholder');
+  }
+  document.getElementById('pista-input').value = d.pista || '';
+  document.getElementById('pista-edit-area').classList.remove('open');
+
+  // done btn
+  const db = document.getElementById('done-btn');
+  if (d.done) {
+    db.textContent = '✓ Encontrado';
+    db.classList.add('done-active');
+  } else {
+    db.textContent = '○ Marcar como encontrado';
+    db.classList.remove('done-active');
+  }
+
+  // edit
+  document.getElementById('edit-titulo').value = d.titulo;
+  document.getElementById('edit-desc').value = d.desc;
+  document.getElementById('edit-tip').value = d.tip;
+  document.getElementById('edit-section').classList.remove('open');
+
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  state.current = null;
+}
+
+function toggleDone() {
+  const d = state.dias.find(x => x.n === state.current);
+  d.done = !d.done;
+  guardarDatos();
+  renderCalendario();
+  abrirModal(state.current);
+}
+
+function togglePistaEdit() {
+  document.getElementById('pista-edit-area').classList.toggle('open');
+}
+
+function toggleEdit() {
+  document.getElementById('edit-section').classList.toggle('open');
+}
+
+function guardarTodo() {
+  const d = state.dias.find(x => x.n === state.current);
+  const titulo = document.getElementById('edit-titulo').value.trim();
+  const desc = document.getElementById('edit-desc').value.trim();
+  const tip = document.getElementById('edit-tip').value.trim();
+  const pista = document.getElementById('pista-input').value.trim();
+  if (titulo) d.titulo = titulo;
+  if (desc) d.desc = desc;
+  if (tip) d.tip = tip;
+  d.pista = pista;
+  guardarDatos();
+  renderCalendario();
+  abrirModal(state.current);
+  document.getElementById('edit-section').classList.remove('open');
+  document.getElementById('pista-edit-area').classList.remove('open');
+}
+
+document.getElementById('modal-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+</body>
+</html>
