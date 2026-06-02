@@ -310,6 +310,7 @@ function entrar(){
   document.getElementById('app').classList.add('visible');
   document.getElementById('admin-fab-wrap').classList.add('visible');
   renderLeyenda();renderCalendario();actualizarBadge();
+  loadRemoteData(); // sync from GitHub on load
 }
 function verPortada(){closeModal();document.getElementById('portada').style.display='flex';document.getElementById('app').classList.remove('visible');}
 function toggleAdmin(){
@@ -401,6 +402,75 @@ function closeModal(){document.getElementById('modal-overlay').classList.remove(
 function toggleDone(){const d=state.dias.find(x=>x.n===state.current);d.done=!d.done;guardarDatos();renderCalendario();abrirModal(state.current);}
 function togglePistaEdit(){document.getElementById('pista-edit-wrap').classList.toggle('open');}
 function toggleEdit(){document.getElementById('edit-section').classList.toggle('open');}
+// ─── GITHUB SYNC via proxy ───
+const DATA_FILE = 'data.json';
+const CDN_DATA  = 'https://raw.githubusercontent.com/deeck1377-bit/junio-lu/main/data.json';
+
+// Load remote data on startup and merge with local
+async function loadRemoteData() {
+  try {
+    const res = await fetch(CDN_DATA + '?t=' + Date.now());
+    if (res.ok) {
+      const remote = await res.json();
+      // Merge remote into state: remote wins for pista/titulo/desc/tip/done
+      state.dias = BASE.map(b => {
+        const r = remote.find(x => x.n === b.n);
+        const l = state.dias.find(x => x.n === b.n);
+        return { ...b, ...(l || {}), ...(r || {}), n: b.n };
+      });
+      guardarDatos();
+      renderCalendario();
+    }
+  } catch(e) { /* offline — use localStorage */ }
+}
+
+async function syncToGitHub() {
+  showSyncBadge('Sincronizando...');
+  try {
+    // Only save fields that differ from BASE
+    const toSave = state.dias.map(d => {
+      const b = BASE.find(x => x.n === d.n);
+      const diff = { n: d.n };
+      if (d.pista)               diff.pista  = d.pista;
+      if (d.done)                diff.done   = d.done;
+      if (d.titulo !== b.titulo) diff.titulo = d.titulo;
+      if (d.desc   !== b.desc)   diff.desc   = d.desc;
+      if (d.tip    !== b.tip)    diff.tip    = d.tip;
+      return diff;
+    }).filter(d => Object.keys(d).length > 1);
+
+    const res = await fetch('/api/sync', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: toSave })
+    });
+
+    if (res.ok) {
+      showSyncBadge('✅ Guardado — visible en todos los dispositivos');
+    } else {
+      const err = await res.json();
+      showSyncBadge('❌ ' + (err.error || 'Error al guardar'));
+    }
+  } catch(e) {
+    showSyncBadge('❌ Sin conexión');
+  }
+}
+
+function showSyncBadge(msg) {
+  let badge = document.getElementById('sync-badge');
+  if (!badge) {
+    badge = document.createElement('div');
+    badge.id = 'sync-badge';
+    badge.style.cssText = 'position:fixed;bottom:5rem;right:1.5rem;background:var(--tinta);color:white;font-size:12px;padding:8px 16px;border-radius:99px;z-index:300;font-family:var(--font-sans,sans-serif);box-shadow:0 4px 16px rgba(0,0,0,.2);transition:opacity .4s;';
+    document.body.appendChild(badge);
+  }
+  badge.textContent = msg;
+  badge.style.opacity = '1';
+  if (msg.startsWith('✅')) {
+    setTimeout(() => { badge.style.opacity = '0'; }, 3000);
+  }
+}
+
 function guardarTodo(){
   const d=state.dias.find(x=>x.n===state.current);
   const t=document.getElementById('edit-titulo').value.trim();
@@ -411,6 +481,7 @@ function guardarTodo(){
   guardarDatos();renderCalendario();abrirModal(state.current);
   document.getElementById('edit-section').classList.remove('open');
   document.getElementById('pista-edit-wrap').classList.remove('open');
+  syncToGitHub();
 }
 document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
