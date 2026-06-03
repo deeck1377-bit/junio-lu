@@ -407,20 +407,22 @@ function toggleEdit(){document.getElementById('edit-section').classList.toggle('
 
 async function loadRemoteData() {
   try {
-    const res = await fetch('/api/sync');
+    const res = await fetch('/api/sync?t=' + Date.now());
     if (!res.ok) return;
     const json = await res.json();
-    if (!json.ok || !json.data) return;
+    if (!json.ok || !json.data || !json.data.length) return;
     const remote = json.data;
-    // Merge: remote wins over local for pista/titulo/desc/tip/done
+    // Remote SIEMPRE gana — sobreescribe local completamente
     state.dias = BASE.map(b => {
       const r = remote.find(x => x.n === b.n);
-      const l = state.dias.find(x => x.n === b.n);
-      return { ...b, ...(l||{}), ...(r||{}), n: b.n };
+      return r ? { ...b, ...r, n: b.n } : { ...b };
     });
     guardarDatos();
     renderCalendario();
-  } catch(e) { /* offline — usa localStorage */ }
+    console.log('✅ Estado cargado desde Upstash:', remote.length, 'cambios');
+  } catch(e) {
+    console.log('⚠️ Sin conexión, usando localStorage:', e.message);
+  }
 }
 
 async function syncToGitHub() {
