@@ -9,38 +9,50 @@ export default async function handler(req, res) {
   const KV_READ  = process.env.KV_REST_API_READ_ONLY_TOKEN;
   const KEY = 'junio_lu_state';
 
-  // GET — load state
+  if (!KV_URL || !KV_TOKEN) {
+    return res.status(500).json({ ok: false, error: 'Missing env vars' });
+  }
+
+  // GET — cargar estado
   if (req.method === 'GET') {
     try {
       const r = await fetch(`${KV_URL}/get/${KEY}`, {
-        headers: { Authorization: `Bearer ${KV_READ}` }
+        headers: { Authorization: `Bearer ${KV_READ || KV_TOKEN}` }
       });
       const data = await r.json();
-      const value = data.result ? JSON.parse(data.result) : null;
-      return res.status(200).json({ ok: true, data: value });
+      if (data.result) {
+        const parsed = JSON.parse(data.result);
+        return res.status(200).json({ ok: true, data: parsed });
+      }
+      return res.status(200).json({ ok: true, data: null });
     } catch(e) {
       return res.status(500).json({ ok: false, error: e.message });
     }
   }
 
-  // POST — save state
+  // POST — guardar estado
   if (req.method === 'POST') {
     try {
-      const { data } = req.body;
-      const encoded = encodeURIComponent(JSON.stringify(data));
+      let body = req.body;
+      if (typeof body === 'string') body = JSON.parse(body);
+      const { data } = body;
+      
+      const value = JSON.stringify(data);
+      
       const r = await fetch(`${KV_URL}/set/${KEY}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${KV_TOKEN}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ value: JSON.stringify(data) })
+        body: JSON.stringify({ value })
       });
       const result = await r.json();
+      
       if (result.result === 'OK') {
         return res.status(200).json({ ok: true });
       } else {
-        return res.status(500).json({ ok: false, error: result });
+        return res.status(500).json({ ok: false, error: JSON.stringify(result) });
       }
     } catch(e) {
       return res.status(500).json({ ok: false, error: e.message });
