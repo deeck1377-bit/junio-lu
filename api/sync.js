@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   const KEY = 'junio_lu_state';
 
   if (!KV_URL || !KV_TOKEN) {
-    return res.status(500).json({ ok: false, error: 'Missing env vars' });
+    return res.status(500).json({ ok: false, error: 'Missing env vars: ' + KV_URL });
   }
 
   // GET — cargar estado
@@ -19,43 +19,46 @@ export default async function handler(req, res) {
       const r = await fetch(`${KV_URL}/get/${KEY}`, {
         headers: { Authorization: `Bearer ${KV_READ || KV_TOKEN}` }
       });
-      const data = await r.json();
-      if (data.result) {
+      const text = await r.text();
+      const data = JSON.parse(text);
+      if (data.result && data.result !== null) {
         const parsed = JSON.parse(data.result);
         return res.status(200).json({ ok: true, data: parsed });
       }
       return res.status(200).json({ ok: true, data: null });
     } catch(e) {
-      return res.status(500).json({ ok: false, error: e.message });
+      return res.status(500).json({ ok: false, error: 'GET error: ' + e.message });
     }
   }
 
-  // POST — guardar estado
+  // POST — guardar estado usando pipeline REST de Upstash
   if (req.method === 'POST') {
     try {
       let body = req.body;
       if (typeof body === 'string') body = JSON.parse(body);
       const { data } = body;
-      
       const value = JSON.stringify(data);
-      
-      const r = await fetch(`${KV_URL}/set/${KEY}`, {
+
+      // Upstash REST API: POST /pipeline con comandos
+      const r = await fetch(`${KV_URL}/pipeline`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${KV_TOKEN}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ value })
+        body: JSON.stringify([["SET", KEY, value]])
       });
-      const result = await r.json();
-      
-      if (result.result === 'OK') {
+      const text = await r.text();
+      const result = JSON.parse(text);
+
+      // result es array, primer elemento debe ser {result: "OK"}
+      if (Array.isArray(result) && result[0]?.result === 'OK') {
         return res.status(200).json({ ok: true });
       } else {
-        return res.status(500).json({ ok: false, error: JSON.stringify(result) });
+        return res.status(500).json({ ok: false, error: text });
       }
     } catch(e) {
-      return res.status(500).json({ ok: false, error: e.message });
+      return res.status(500).json({ ok: false, error: 'POST error: ' + e.message });
     }
   }
 
