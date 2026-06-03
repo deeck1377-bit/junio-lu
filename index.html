@@ -403,32 +403,29 @@ function closeModal(){document.getElementById('modal-overlay').classList.remove(
 function toggleDone(){const d=state.dias.find(x=>x.n===state.current);d.done=!d.done;guardarDatos();renderCalendario();abrirModal(state.current);}
 function togglePistaEdit(){document.getElementById('pista-edit-wrap').classList.toggle('open');}
 function toggleEdit(){document.getElementById('edit-section').classList.toggle('open');}
-// ─── GITHUB SYNC via proxy ───
-const DATA_FILE = 'data.json';
-const CDN_DATA  = 'https://raw.githubusercontent.com/deeck1377-bit/junio-lu/main/data.json';
+// ─── SYNC via Upstash Redis ───
 
-// Load remote data on startup and merge with local
 async function loadRemoteData() {
   try {
-    const res = await fetch(CDN_DATA + '?t=' + Date.now());
-    if (res.ok) {
-      const remote = await res.json();
-      // Merge remote into state: remote wins for pista/titulo/desc/tip/done
-      state.dias = BASE.map(b => {
-        const r = remote.find(x => x.n === b.n);
-        const l = state.dias.find(x => x.n === b.n);
-        return { ...b, ...(l || {}), ...(r || {}), n: b.n };
-      });
-      guardarDatos();
-      renderCalendario();
-    }
-  } catch(e) { /* offline — use localStorage */ }
+    const res = await fetch('/api/sync');
+    if (!res.ok) return;
+    const json = await res.json();
+    if (!json.ok || !json.data) return;
+    const remote = json.data;
+    // Merge: remote wins over local for pista/titulo/desc/tip/done
+    state.dias = BASE.map(b => {
+      const r = remote.find(x => x.n === b.n);
+      const l = state.dias.find(x => x.n === b.n);
+      return { ...b, ...(l||{}), ...(r||{}), n: b.n };
+    });
+    guardarDatos();
+    renderCalendario();
+  } catch(e) { /* offline — usa localStorage */ }
 }
 
 async function syncToGitHub() {
-  showSyncBadge('Sincronizando...');
+  showSyncBadge('Guardando...');
   try {
-    // Only save fields that differ from BASE
     const toSave = state.dias.map(d => {
       const b = BASE.find(x => x.n === d.n);
       const diff = { n: d.n };
@@ -445,12 +442,11 @@ async function syncToGitHub() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ data: toSave })
     });
-
-    if (res.ok) {
-      showSyncBadge('✅ Guardado — visible en todos los dispositivos');
+    const json = await res.json();
+    if (json.ok) {
+      showSyncBadge('✅ Guardado en todos los dispositivos');
     } else {
-      const err = await res.json();
-      showSyncBadge('❌ ' + (err.error || 'Error al guardar'));
+      showSyncBadge('❌ Error: ' + (json.error || 'intenta de nuevo'));
     }
   } catch(e) {
     showSyncBadge('❌ Sin conexión');
@@ -600,6 +596,7 @@ function toggleDone() {
   abrirModal(state.current);
 
   if (wasNotDone) {
+    syncToGitHub(); // sync al marcar encontrado
     closeModal();
     // Día 2 especial — mostrar reglas del cuaderno primero
     if (d.n === 2) {
