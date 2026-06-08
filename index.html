@@ -441,7 +441,17 @@ function diaHoy(){
   if(mx.getFullYear()===2026&&mx.getMonth()>5)return 99;
   return 0;
 }
-function estaDesbloqueado(n){return state.isAdmin||n<=diaHoy();}
+function horaHoy(){
+  const mx=new Date(new Date().toLocaleString('en-US',{timeZone:'America/Mexico_City'}));
+  return mx.getHours() + mx.getMinutes()/60;
+}
+function estaDesbloqueado(n){
+  if(state.isAdmin) return true;
+  const hoy = diaHoy();
+  // Día 8 se desbloquea a las 14:00 (2pm) hora México
+  if(n === 8) return hoy > 8 || (hoy === 8 && horaHoy() >= 14);
+  return n <= hoy;
+}
 
 const state={dias:cargarDatos(),current:null,filtro:null,isAdmin:localStorage.getItem(ADMIN_KEY)==='true'};
 
