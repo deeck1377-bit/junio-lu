@@ -448,9 +448,11 @@ function horaHoy(){
 function estaDesbloqueado(n){
   if(state.isAdmin) return true;
   const hoy = diaHoy();
-  // Día 8 se desbloquea a las 14:00 (2pm) hora México
-  if(n === 8) return hoy > 8 || (hoy === 8 && horaHoy() >= 14);
-  return n <= hoy;
+  const hora = horaHoy();
+  // Todos los días se desbloquean a las 11am hora México
+  if(n < hoy) return true;
+  if(n === hoy) return hora >= 11;
+  return false;
 }
 
 const state={dias:cargarDatos(),current:null,filtro:null,isAdmin:localStorage.getItem(ADMIN_KEY)==='true'};
