@@ -274,6 +274,30 @@ body{font-family:'DM Sans',sans-serif;background:var(--papel);color:var(--tinta)
   margin-top: 12px;
 }
 
+
+/* 10 RAZONES MODAL */
+.razones-overlay{display:none;position:fixed;inset:0;background:rgba(26,16,20,.65);z-index:300;align-items:center;justify-content:center;padding:1.5rem 1rem;overflow-y:auto;backdrop-filter:blur(6px);}
+.razones-overlay.open{display:flex;}
+.razones-card{background:var(--papel);border-radius:24px;width:100%;max-width:380px;overflow:hidden;margin:auto;box-shadow:0 24px 64px rgba(0,0,0,.22);animation:slideUp .25s ease;}
+.razones-header{background:linear-gradient(135deg,#FBEAF0 0%,#FAEEDA 100%);padding:2rem 1.5rem 1.5rem;text-align:center;position:relative;}
+.razones-header-num{font-size:48px;font-family:'Playfair Display',serif;color:var(--rosa);line-height:1;margin-bottom:6px;font-weight:400;}
+.razones-header-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:400;color:var(--tinta);line-height:1.3;}
+.razones-header-sub{font-size:12px;color:var(--gris);margin-top:5px;}
+.razones-body{padding:1.25rem 1.5rem 1.5rem;}
+.razon-item{display:flex;gap:14px;align-items:flex-start;padding:10px 0;border-bottom:.5px dashed var(--papel-oscuro);animation:razonIn .4s ease both;}
+.razon-item:last-child{border-bottom:none;}
+@keyframes razonIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.razon-num{font-family:'Playfair Display',serif;font-size:24px;color:var(--rosa);font-weight:400;line-height:1;flex-shrink:0;width:28px;}
+.razon-content{}
+.razon-title{font-size:14px;font-weight:500;color:var(--tinta);line-height:1.4;}
+.razon-desc{font-size:12px;color:var(--gris);line-height:1.5;margin-top:2px;font-style:italic;}
+.razones-footer{padding:0 1.5rem 1.5rem;text-align:center;}
+.razones-close-btn{background:var(--tinta);color:white;border:none;padding:10px 32px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .15s;}
+.razones-close-btn:hover{opacity:.85;}
+/* Boton ver lista en modal dia 12 */
+.ver-lista-btn{background:linear-gradient(135deg,var(--rosa),#c0507a);color:white;border:none;padding:8px 20px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;transition:transform .15s,opacity .15s;}
+.ver-lista-btn:hover{transform:translateY(-1px);opacity:.9;}
+
 </style>
 </head>
 <body>
@@ -406,7 +430,7 @@ const BASE=[
   {n:9,tipo:'actividad',titulo:'Reto: escribeme algo',desc:'Hay un papel con una instruccion para ti. Sin presion — lo haces cuando quieras hoy.',tip:'💡 Martes ligero. Pidele 5 cosas que quiere hacer antes de cumplir 29.'},
   {n:10,tipo:'chocolate',titulo:'Chocolate #2',desc:'Segundo chocolate, con una nota sobre algo que me encanta de ti. Algo concreto.',tip:'💡 Me encanta como te ries cuando algo te da pena ajena.'},
   {n:11,tipo:'plan',titulo:'Comidita juntos 🍽️',desc:'Disfruta de la comidita.',tip:'💡 Cena o tarde juntos — sin telefono, solo ustedes.'},
-  {n:12,tipo:'carta',titulo:'Carta: 10 razones',desc:'Una lista escrita a mano. 10 razones por las que me alegra que existas.',tip:'💡 Tachado y reescrito se vale — eso lo hace mas tuyo.'},
+  {n:12,tipo:'carta',titulo:'Carta: 10 razones 💌',desc:'Una carta solo para ti. 10 razones por las que me alegra infinito que existas.',tip:'💡 Toca el botón de la lista para revelarlas.',tieneRazones:true},
   {n:13,tipo:'plan',titulo:'Tocho y picnic 🏈🧺',desc:'Ponte tus tenis y algo comodo — hay partido hoy y picnic despues. Algo tuyo esta escondido en la canasta.',tip:'💡 Lleva un balon. Parque + picnic. Esconde adentro la tarea del cuaderno #1 en un papelito. Noche en casa tranquilos.'},
   {n:14,tipo:'plan',titulo:'Patinar en hielo ⛸️',desc:'Ponte algo comodo y abrigado — hoy patinamos. No importa si no sabes, para eso estoy yo. Noche en casa con velas.',tip:'💡 Busca la pista de hielo mas cercana. Noche de vuelta en casa con velas y algo rico.'},
   {n:15,tipo:'carta',titulo:'Mitad del mes',desc:'Llegamos a la mitad. Hay una nota esperandote con lo que siento en este punto del mes.',tip:'💡 Servilleta, post-it, lo que sea. El gesto es lo que cuenta.'},
@@ -548,6 +572,17 @@ function abrirModal(n){
     const lb=document.getElementById('lu-done-btn');
     lb.textContent=d.done?'✓ Ya lo encontre!':'○ Marcar como encontrado';
     lb.className='act-btn'+(d.done?' success':'');
+    // Botón especial día 12
+    const existingBtn = document.getElementById('razones-trigger-btn');
+    if(existingBtn) existingBtn.remove();
+    if(d.tieneRazones){
+      const rBtn = document.createElement('button');
+      rBtn.id = 'razones-trigger-btn';
+      rBtn.className = 'ver-lista-btn';
+      rBtn.innerHTML = '✨ Ver las 10 razones';
+      rBtn.onclick = abrirRazones;
+      document.getElementById('lu-actions').appendChild(rBtn);
+    }
   }
   document.getElementById('modal-overlay').classList.add('open');
 }
@@ -817,6 +852,18 @@ document.getElementById('spotify-overlay')?.addEventListener('click', function(e
   if (e.target === this) cerrarSpotify();
 });
 
+
+// ─── 10 RAZONES ───
+function abrirRazones() {
+  document.getElementById('razones-overlay').classList.add('open');
+}
+function cerrarRazones() {
+  document.getElementById('razones-overlay').classList.remove('open');
+}
+document.getElementById('razones-overlay')?.addEventListener('click', function(e) {
+  if (e.target === this) cerrarRazones();
+});
+
 </script>
 
 <canvas id="confetti-canvas"></canvas>
@@ -911,6 +958,93 @@ document.getElementById('spotify-overlay')?.addEventListener('click', function(e
         <br><br>
         <button class="spotify-cancel" onclick="cerrarSpotify()">Cerrar</button>
       </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL 10 RAZONES DÍA 12 -->
+<div class="razones-overlay" id="razones-overlay">
+  <div class="razones-card">
+    <div class="razones-header">
+      <div class="razones-header-num">10</div>
+      <div class="razones-header-title">razones por las que<br>me alegra que existas</div>
+      <div class="razones-header-sub">— Escrito con el corazón, para ti —</div>
+    </div>
+    <div class="razones-body" id="razones-body">
+      <div class="razon-item" style="animation-delay:.05s">
+        <div class="razon-num">1</div>
+        <div class="razon-content">
+          <div class="razon-title">Tus ojos</div>
+          <div class="razon-desc">Hay un universo entero en ellos. Me pierdo cada vez que te miro.</div>
+        </div>
+      </div>
+      <div class="razon-item" style="animation-delay:.1s">
+        <div class="razon-num">2</div>
+        <div class="razon-content">
+          <div class="razon-title">Tu energía</div>
+          <div class="razon-desc">Entras a un lugar y lo cambias. Nunca pasa desapercibida.</div>
+        </div>
+      </div>
+      <div class="razon-item" style="animation-delay:.15s">
+        <div class="razon-num">3</div>
+        <div class="razon-content">
+          <div class="razon-title">Tu esencia</div>
+          <div class="razon-desc">Hay algo en ti que no se puede describir, solo se siente. Y me encanta sentirlo.</div>
+        </div>
+      </div>
+      <div class="razon-item" style="animation-delay:.2s">
+        <div class="razon-num">4</div>
+        <div class="razon-content">
+          <div class="razon-title">Todo lo que aportas a mi vida</div>
+          <div class="razon-desc">Desde que estás, todo tiene más color, más sentido, más sabor.</div>
+        </div>
+      </div>
+      <div class="razon-item" style="animation-delay:.25s">
+        <div class="razon-num">5</div>
+        <div class="razon-content">
+          <div class="razon-title">Eres la mejor doctora que conozco</div>
+          <div class="razon-desc">Tu vocación me enamora. Cuidas a todos con una entrega que me llena de orgullo.</div>
+        </div>
+      </div>
+      <div class="razon-item" style="animation-delay:.3s">
+        <div class="razon-num">6</div>
+        <div class="razon-content">
+          <div class="razon-title">Tu sencillez</div>
+          <div class="razon-desc">No necesitas nada para brillar. Eres extraordinaria siendo tú.</div>
+        </div>
+      </div>
+      <div class="razon-item" style="animation-delay:.35s">
+        <div class="razon-num">7</div>
+        <div class="razon-content">
+          <div class="razon-title">Tu voz súper hermosa</div>
+          <div class="razon-desc">Podría escucharte hablar para siempre. Cada palabra tuya me llega diferente.</div>
+        </div>
+      </div>
+      <div class="razon-item" style="animation-delay:.4s">
+        <div class="razon-num">8</div>
+        <div class="razon-content">
+          <div class="razon-title">Tu cuerpo súper sexi</div>
+          <div class="razon-desc">Me robas el aliento. Siempre. Sin esfuerzo. Solo siendo tú.</div>
+        </div>
+      </div>
+      <div class="razon-item" style="animation-delay:.45s">
+        <div class="razon-num">9</div>
+        <div class="razon-content">
+          <div class="razon-title">Tu cabello hermoso</div>
+          <div class="razon-desc">Es parte de tu magia. Me encanta verlo, me encanta cuando lo sueltas.</div>
+        </div>
+      </div>
+      <div class="razon-item" style="animation-delay:.5s">
+        <div class="razon-num">10</div>
+        <div class="razon-content">
+          <div class="razon-title">Tu mente e inteligencia me enamoran</div>
+          <div class="razon-desc">Hablar contigo es mi parte favorita del día. Me inspiras, me retas, me enamoras.</div>
+        </div>
+      </div>
+    </div>
+    <div class="razones-footer">
+      <button class="razones-close-btn" onclick="cerrarRazones()">Guardar en mi corazón 💛</button>
     </div>
   </div>
 </div>
