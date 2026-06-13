@@ -298,6 +298,20 @@ body{font-family:'DM Sans',sans-serif;background:var(--papel);color:var(--tinta)
 .ver-lista-btn{background:linear-gradient(135deg,var(--rosa),#c0507a);color:white;border:none;padding:8px 20px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;transition:transform .15s,opacity .15s;}
 .ver-lista-btn:hover{transform:translateY(-1px);opacity:.9;}
 
+
+/* MODAL TAREA CUADERNO */
+.tarea-overlay{display:none;position:fixed;inset:0;background:rgba(26,16,20,.65);z-index:300;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(6px);}
+.tarea-overlay.open{display:flex;}
+.tarea-card{background:white;border-radius:24px;width:100%;max-width:360px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.22);animation:slideUp .25s ease;}
+.tarea-header{padding:2rem 1.5rem 1.25rem;text-align:center;}
+.tarea-emoji{font-size:48px;margin-bottom:12px;}
+.tarea-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:400;color:var(--tinta);line-height:1.3;margin-bottom:8px;}
+.tarea-msg{font-size:13px;color:var(--gris);line-height:1.65;padding:0 .5rem;}
+.tarea-recordatorio{background:var(--dorado-claro);border:.5px solid #E8C97A;border-radius:12px;padding:12px 16px;margin:1rem 1.5rem;font-size:13px;color:#7A5000;line-height:1.6;text-align:center;}
+.tarea-recordatorio strong{display:block;font-size:14px;margin-bottom:4px;color:#5A3800;}
+.tarea-footer{padding:.5rem 1.5rem 1.5rem;text-align:center;}
+.tarea-close{background:var(--tinta);color:white;border:none;padding:10px 32px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
+
 </style>
 </head>
 <body>
@@ -431,8 +445,8 @@ const BASE=[
   {n:10,tipo:'chocolate',titulo:'Chocolate #2',desc:'Segundo chocolate, con una nota sobre algo que me encanta de ti. Algo concreto.',tip:'💡 Me encanta como te ries cuando algo te da pena ajena.'},
   {n:11,tipo:'plan',titulo:'Comidita juntos 🍽️',desc:'Disfruta de la comidita.',tip:'💡 Cena o tarde juntos — sin telefono, solo ustedes.'},
   {n:12,tipo:'carta',titulo:'Carta: 10 razones 💌',desc:'Una carta solo para ti. 10 razones por las que me alegra infinito que existas.',tip:'💡 Toca el botón de la lista para revelarlas.',tieneRazones:true},
-  {n:13,tipo:'plan',titulo:'Tocho y picnic 🏈🧺',desc:'Ponte tus tenis y algo comodo — hay partido hoy y picnic despues. Algo tuyo esta escondido en la canasta.',tip:'💡 Lleva un balon. Parque + picnic. Esconde adentro la tarea del cuaderno #1 en un papelito. Noche en casa tranquilos.'},
-  {n:14,tipo:'plan',titulo:'Patinar en hielo ⛸️',desc:'Ponte algo comodo y abrigado — hoy patinamos. No importa si no sabes, para eso estoy yo. Noche en casa con velas.',tip:'💡 Busca la pista de hielo mas cercana. Noche de vuelta en casa con velas y algo rico.'},
+  {n:13,tipo:'cuaderno',titulo:'Tu hoja sin filtro 📓',desc:'Hoy tienes una tarea especial en tu cuaderno. Abre una hoja nueva y escribe sin miedo: las peleas sin resolver, lo que te duele, los enojos guardados, las cosas que tienes miedo de decir en voz alta pero que en letras se sienten diferente. Nadie te juzga. Es tu espacio.',tip:'💡 Deja el cuaderno en un lugar seguro. El lunes se lo darás a Oscar.',tieneTareasCuaderno:13},
+  {n:14,tipo:'cuaderno',titulo:'Hoja de promesas y límites 🤝',desc:'En la siguiente hoja del cuaderno, escribe los límites que necesitas que se respeten, las promesas que quieres pedir, las reglas que son importantes para ti en esta relación. Lo que para ti no es negociable. Escríbelo claro, escríbelo con amor.',tip:'💡 Esta hoja es de las más importantes del cuaderno. El lunes se lo darás a Oscar.',tieneTareasCuaderno:14},
   {n:15,tipo:'carta',titulo:'Mitad del mes',desc:'Llegamos a la mitad. Hay una nota esperandote con lo que siento en este punto del mes.',tip:'💡 Servilleta, post-it, lo que sea. El gesto es lo que cuenta.'},
   {n:16,tipo:'chocolate',titulo:'Chocolate #3',desc:'Tercer chocolate. Este viene con una pregunta. No tienes que contestarla — solo pensarla.',tip:'💡 Que es lo que mas te gusta de nosotros?'},
   {n:17,tipo:'actividad',titulo:'Dibujame algo',desc:'Un papel en blanco con una sola instruccion. Sin reglas, sin presion.',tip:'💡 Pidele que dibuje algo que represente este ano. Tu tambien haz el tuyo.'},
@@ -787,6 +801,15 @@ function toggleDone() {
   if (wasNotDone) {
     syncToGitHub(); // sync al marcar encontrado
     closeModal();
+    // Días 13 y 14 — tarea cuaderno
+    if ((d.n === 13 || d.n === 14) && TAREAS_CUADERNO[d.n]) {
+      const t = TAREAS_CUADERNO[d.n];
+      document.getElementById('tarea-emoji').textContent = t.emoji;
+      document.getElementById('tarea-title').textContent = t.title;
+      document.getElementById('tarea-msg').textContent = t.msg;
+      document.getElementById('tarea-overlay').classList.add('open');
+      return;
+    }
     // Día 2 especial — mostrar reglas del cuaderno primero
     if (d.n === 2) {
       document.getElementById('cuaderno-overlay').style.display = 'flex';
@@ -862,6 +885,28 @@ function cerrarRazones() {
 }
 document.getElementById('razones-overlay')?.addEventListener('click', function(e) {
   if (e.target === this) cerrarRazones();
+});
+
+
+// ─── TAREA CUADERNO DÍAS 13 Y 14 ───
+const TAREAS_CUADERNO = {
+  13: {
+    emoji: '✍️',
+    title: '¡Hoja escrita!',
+    msg: 'Eso que escribiste toma valentía. Gracias por hacerlo, por no guardarlo, por decirlo aunque sea en letras. Ese cuaderno ahora tiene algo muy tuyo.'
+  },
+  14: {
+    emoji: '🤝',
+    title: '¡Promesas escritas!',
+    msg: 'Lo que escribiste en esa hoja importa mucho. Cada límite, cada promesa, cada regla que pusiste ahí viene de un lugar honesto. Eso construye algo sólido.'
+  }
+};
+
+function cerrarTarea() {
+  document.getElementById('tarea-overlay').classList.remove('open');
+}
+document.getElementById('tarea-overlay')?.addEventListener('click', function(e) {
+  if (e.target === this) cerrarTarea();
 });
 
 </script>
@@ -1045,6 +1090,25 @@ document.getElementById('razones-overlay')?.addEventListener('click', function(e
     </div>
     <div class="razones-footer">
       <button class="razones-close-btn" onclick="cerrarRazones()">Guardar en mi corazón 💛</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL TAREA CUADERNO DÍAS 13 Y 14 -->
+<div class="tarea-overlay" id="tarea-overlay">
+  <div class="tarea-card">
+    <div class="tarea-header">
+      <div class="tarea-emoji" id="tarea-emoji">📓</div>
+      <div class="tarea-title" id="tarea-title"></div>
+      <div class="tarea-msg" id="tarea-msg"></div>
+    </div>
+    <div class="tarea-recordatorio">
+      <strong>📅 Recuerda</strong>
+      El lunes tienes que darle el cuaderno a Oscar para que él escriba lo suyo. Es un ejercicio para los dos. 💛
+    </div>
+    <div class="tarea-footer">
+      <button class="tarea-close" onclick="cerrarTarea()">Entendido 💛</button>
     </div>
   </div>
 </div>
