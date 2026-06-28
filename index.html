@@ -309,25 +309,159 @@ body{font-family:'DM Sans',sans-serif;background:var(--papel);color:var(--tinta)
 .tarea-footer{padding:.5rem 1.5rem 1.5rem;text-align:center;}
 .tarea-close{background:var(--tinta);color:white;border:none;padding:10px 32px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
 
+
+/* PANTALLAS PORTADA */
+.p-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2.5rem 1.5rem;text-align:center;position:relative;}
+
+/* TRANSICIÓN APAGAR LUCES */
+.lights-off {
+  animation: lightsOff 1.8s ease forwards;
+}
+@keyframes lightsOff {
+  0%   { opacity: 1; filter: brightness(1); }
+  40%  { opacity: 1; filter: brightness(0.15); }
+  60%  { opacity: 1; filter: brightness(0.05); }
+  100% { opacity: 1; filter: brightness(1); }
+}
+
+/* TEMA OSCURO DEL CALENDARIO */
+body.dark-mode {
+  --papel: #0F0A0D;
+  --papel-oscuro: #1E1318;
+  --tinta: #F2E8E0;
+  --gris: #8A7A74;
+  --gris-claro: #2A1E22;
+  --rosa: #D4537E;
+  --rosa-claro: #2A1018;
+  --rosa-medio: #5A2035;
+  --dorado: #C8901A;
+  --dorado-claro: #2A1E08;
+  background: #0F0A0D;
+}
+
+body.dark-mode .topbar,
+body.dark-mode .progress-wrap,
+body.dark-mode .hora-banner + .topbar {
+  background: #0F0A0D;
+  border-color: #1E1318;
+}
+
+body.dark-mode .day-cell {
+  background: #150D10;
+  border-color: #2A1E22;
+}
+
+body.dark-mode .day-cell.unlocked {
+  background: #1A1015;
+}
+
+body.dark-mode .day-num-cell { color: #F2E8E0; }
+body.dark-mode .day-label-cell { color: #5A4A50; }
+
+body.dark-mode .hora-banner {
+  background: #0A0608;
+}
+
+body.dark-mode .progress-track {
+  background: #1E1318;
+}
+
+/* VELA AMBIENTAL */
+.vela-ambient {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 120px;
+  background: linear-gradient(to top, rgba(186,117,23,0.08), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+body.dark-mode .vela-ambient { display: block; }
+
+/* TOPBAR DARK */
+body.dark-mode .topbar-title { color: #F2E8E0; }
+body.dark-mode .topbar-btn {
+  color: #8A7A74;
+  border-color: #2A1E22;
+}
+body.dark-mode .topbar-btn:hover { background: #1E1318; }
+body.dark-mode .mode-badge.lu {
+  background: #2A1018;
+  color: var(--rosa);
+  border-color: #5A2035;
+}
+body.dark-mode .cal-wday { color: #5A4A50; }
+
+
+body.dark-mode .modal-card,
+body.dark-mode .modal-header { background: #150D10; }
+body.dark-mode .modal-titulo { color: #F2E8E0; }
+body.dark-mode .modal-fecha { color: #5A4A50; }
+body.dark-mode .modal-desc { color: #C8B8B0; }
+body.dark-mode .modal-close { background: #1E1318; border-color: #2A1E22; color: #8A7A74; }
+body.dark-mode .modal-body { background: #150D10; }
+body.dark-mode .tip-box { background: #1A1015; color: #5A4A50; }
+body.dark-mode .act-btn { background: #1A1015; border-color: #2A1E22; color: #C8B8B0; }
+body.dark-mode .act-btn:hover { background: #1E1318; }
+body.dark-mode .pista-box { background: #1A1015; border-color: #5A2035; }
+body.dark-mode .pista-label { background: #1A1015; }
+body.dark-mode .oscar-bubble { background: #1A1015; border-color: #5A2035; color: #C8B8B0; }
+body.dark-mode .modal-overlay { background: rgba(5,2,4,0.8); }
+
 </style>
 </head>
 <body>
 
 <div class="portada" id="portada">
-  <div class="portada-chip">✦ Junio 2026</div>
-  <h1>Para <em>Lu</em></h1>
-  <p class="portada-sub">30 días · 30 detalles · 1 año · 28 años</p>
-  <div class="portada-reglas">
-    <div class="regla"><span class="regla-num">1</span><span>Cada día hay algo esperándote. Puede estar cerca o escondido — búscalo con los ojos abiertos desde que amanece.</span></div>
-    <div class="regla"><span class="regla-num">2</span><span>Tienes hasta las <strong>9pm</strong> para encontrarlo. Si hay un papelito, es una pista. Síguelo.</span></div>
-    <div class="regla"><span class="regla-num">3</span><span>Aunque el día esté raro — aunque estemos peleados — lo tuyo estará ahí igual.</span></div>
-    <div class="regla"><span class="regla-num">4</span><span>Si a las <strong>9pm</strong> no lo encontraste, a las <strong>10pm exactas</strong> puedes preguntarme qué era. Solo a esa hora.</span></div>
-    <div class="regla"><span class="regla-num">5</span><span>Cada día se revela solo cuando llega. Los días que vienen todavía son un secreto. 🔒</span></div>
-    <div class="regla"><span class="regla-num">6</span><span>Los días que <strong>no nos veamos</strong>, tu sorpresa se acumula. Cuando nos veamos de nuevo, recibirás todo junto — puede ser 2 o 3 cosas en un solo día. Vale la pena esperar. 🤍</span></div>
+  <!-- PANTALLA 1: DISCULPA -->
+  <div class="p-screen" id="screen1">
+    <div class="portada-chip" style="background:#1a1a2e;color:#e0a96d;border-color:#e0a96d44">⚠️ ERROR 503</div>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(36px,8vw,72px);font-weight:400;margin-bottom:.5rem;color:var(--tinta)">
+      <em style="color:var(--rosa)">Disculpe</em><br>los inconvenientes
+    </h1>
+    <p style="font-size:13px;color:var(--gris);max-width:320px;line-height:1.7;margin-bottom:1.5rem">
+      <code style="background:var(--papel-oscuro);padding:2px 8px;border-radius:4px;font-size:11px">junio_lu_2026_v3</code> tuvo una caída inesperada de base de datos.<br>
+      Los ingenieros trabajaron horas extra (ejem, tu novio) para reconstruirlo todo.<br><br>
+      La buena noticia: <strong>la nueva versión es mejor, más íntima y ahora sí guarda todo.</strong>
+    </p>
+    <div style="background:white;border:.5px solid var(--papel-oscuro);border-radius:16px;padding:1.5rem;max-width:360px;width:100%;text-align:left;margin-bottom:2rem">
+      <div style="font-size:11px;color:var(--gris);font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">📋 Registro de errores</div>
+      <div style="font-size:12px;color:var(--gris);line-height:2;font-family:monospace">
+        <span style="color:#e05c5c">[ERR]</span> localStorage v3 corrupto<br>
+        <span style="color:#e05c5c">[ERR]</span> Upstash sync timeout × 47<br>
+        <span style="color:#e0a96d">[WARN]</span> El amor no cabe en 1.6MB<br>
+        <span style="color:#1D9E75">[OK]</span> Base de datos reconstruida ✓<br>
+        <span style="color:#1D9E75">[OK]</span> Junio v6 desplegado ✓<br>
+        <span style="color:#1D9E75">[OK]</span> Lu merece esto y más ✓
+      </div>
+    </div>
+    <button class="btn-enter" onclick="irA2()">Continuar →</button>
   </div>
-  <button class="btn-enter" onclick="entrar()">Abrir el calendario →</button>
+
+  <!-- PANTALLA 2: INSTRUCCIONES -->
+  <div class="p-screen" id="screen2" style="display:none">
+    <div class="portada-chip">✦ Junio 2026 · Nueva versión</div>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(38px,9vw,76px);font-weight:400;line-height:1.05;margin-bottom:.4rem">
+      Ahora <em style="color:var(--rosa)">escribimos</em>
+    </h1>
+    <p style="font-size:14px;color:var(--gris);margin-bottom:2rem;max-width:320px;line-height:1.6">
+      El calendario ya no es solo para ver — ahora es para confesarnos.
+    </p>
+    <div style="background:white;border:.5px solid var(--papel-oscuro);border-radius:18px;padding:1.75rem;max-width:380px;width:100%;text-align:left;margin-bottom:2rem;position:relative">
+      <div style="font-family:'Playfair Display',serif;font-size:12px;font-style:italic;color:var(--gris);position:absolute;top:-10px;left:22px;background:white;padding:0 8px">Cómo funciona</div>
+      <div style="display:flex;flex-direction:column;gap:0">
+        <div class="regla"><span class="regla-num">1</span><span>Cada día tiene <strong>dos papelitos</strong> — uno para ti, uno para Oscar.</span></div>
+        <div class="regla"><span class="regla-num">2</span><span>Escribe lo tuyo primero. Puede ser lo que sea — una confesión, un pensamiento, lo que sientas ese día.</span></div>
+        <div class="regla"><span class="regla-num">3</span><span>Toca <strong>"Guardar para Oscar"</strong> — tu papelito queda sellado.</span></div>
+        <div class="regla"><span class="regla-num">4</span><span>El papelito de Oscar aparece <strong>solo cuando los dos hayan escrito</strong>. No antes.</span></div>
+        <div class="regla" style="border:none"><span class="regla-num">5</span><span>Las reglas del tesoro siguen igual — busca tu sorpresa antes de las <strong>9pm</strong>. A las 10pm puedes preguntar.</span></div>
+      </div>
+    </div>
+    <button class="btn-enter" onclick="irA3()">Entrar al calendario 🕯️</button>
+  </div>
 </div>
 
+<div class="vela-ambient"></div>
 <div class="app" id="app">
   <div class="hora-banner">Búscalo antes de las <strong>9pm</strong> · Si no lo encontraste, a las <strong>10pm exactas</strong> puedes preguntar</div>
   <div class="topbar">
@@ -498,14 +632,30 @@ function estaDesbloqueado(n){
 
 const state={dias:cargarDatos(),current:null,filtro:null,isAdmin:localStorage.getItem(ADMIN_KEY)==='true'};
 
-function entrar(){
-  document.getElementById('portada').style.display='none';
-  document.getElementById('app').classList.add('visible');
-  document.getElementById('admin-fab-wrap').classList.add('visible');
-  renderCalendario();actualizarBadge();
-  loadRemoteData();
-  mostrarSpotifyBtn();
+
+// ─── NAVEGACIÓN PANTALLAS ───
+function irA2() {
+  document.getElementById('screen1').style.display = 'none';
+  document.getElementById('screen2').style.display = 'flex';
+  window.scrollTo(0,0);
 }
+
+function irA3() {
+  // Apagar las luces
+  document.body.classList.add('lights-off');
+  setTimeout(() => {
+    document.getElementById('portada').style.display = 'none';
+    document.getElementById('app').classList.add('visible');
+    document.getElementById('admin-fab-wrap').classList.add('visible');
+    document.body.classList.add('dark-mode');
+    document.body.classList.remove('lights-off');
+    renderCalendario();
+    actualizarBadge();
+    loadRemoteData();
+    mostrarSpotifyBtn();
+  }, 900);
+}
+
 function verPortada(){closeModal();document.getElementById('portada').style.display='flex';document.getElementById('app').classList.remove('visible');}
 function toggleAdmin(){
   if(state.isAdmin){state.isAdmin=false;localStorage.setItem(ADMIN_KEY,'false');}
