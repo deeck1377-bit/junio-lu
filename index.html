@@ -326,44 +326,44 @@ body{font-family:'DM Sans',sans-serif;background:var(--papel);color:var(--tinta)
 
 /* TEMA OSCURO DEL CALENDARIO */
 body.dark-mode {
-  --papel: #0F0A0D;
-  --papel-oscuro: #1E1318;
-  --tinta: #F2E8E0;
-  --gris: #8A7A74;
-  --gris-claro: #2A1E22;
-  --rosa: #D4537E;
-  --rosa-claro: #2A1018;
-  --rosa-medio: #5A2035;
-  --dorado: #C8901A;
-  --dorado-claro: #2A1E08;
-  background: #0F0A0D;
+  --papel: #2D1F2E;
+  --papel-oscuro: #3D2A3E;
+  --tinta: #F5EEF8;
+  --gris: #B8A0BC;
+  --gris-claro: #4A3550;
+  --rosa: #E8829A;
+  --rosa-claro: #3D2035;
+  --rosa-medio: #7A3550;
+  --dorado: #E0A855;
+  --dorado-claro: #3D2E10;
+  background: #2D1F2E;
 }
 
 body.dark-mode .topbar,
-body.dark-mode .progress-wrap,
-body.dark-mode .hora-banner + .topbar {
-  background: #0F0A0D;
-  border-color: #1E1318;
+body.dark-mode .progress-wrap {
+  background: #2D1F2E;
+  border-color: #3D2A3E;
 }
 
 body.dark-mode .day-cell {
-  background: #150D10;
-  border-color: #2A1E22;
+  background: #382440;
+  border-color: #4A3550;
 }
 
 body.dark-mode .day-cell.unlocked {
-  background: #1A1015;
+  background: #3D2A40;
 }
 
-body.dark-mode .day-num-cell { color: #F2E8E0; }
-body.dark-mode .day-label-cell { color: #5A4A50; }
+body.dark-mode .day-num-cell { color: #F5EEF8; }
+body.dark-mode .day-label-cell { color: #8A7090; }
 
 body.dark-mode .hora-banner {
-  background: #0A0608;
+  background: #241828;
+  color: rgba(245,238,248,.85);
 }
 
 body.dark-mode .progress-track {
-  background: #1E1318;
+  background: #4A3550;
 }
 
 /* VELA AMBIENTAL */
@@ -372,7 +372,7 @@ body.dark-mode .progress-track {
   position: fixed;
   bottom: 0; left: 0; right: 0;
   height: 120px;
-  background: linear-gradient(to top, rgba(186,117,23,0.08), transparent);
+  background: linear-gradient(to top, rgba(224,168,85,0.12), transparent);
   pointer-events: none;
   z-index: 1;
 }
@@ -394,19 +394,128 @@ body.dark-mode .cal-wday { color: #5A4A50; }
 
 
 body.dark-mode .modal-card,
-body.dark-mode .modal-header { background: #150D10; }
-body.dark-mode .modal-titulo { color: #F2E8E0; }
-body.dark-mode .modal-fecha { color: #5A4A50; }
-body.dark-mode .modal-desc { color: #C8B8B0; }
-body.dark-mode .modal-close { background: #1E1318; border-color: #2A1E22; color: #8A7A74; }
-body.dark-mode .modal-body { background: #150D10; }
-body.dark-mode .tip-box { background: #1A1015; color: #5A4A50; }
-body.dark-mode .act-btn { background: #1A1015; border-color: #2A1E22; color: #C8B8B0; }
-body.dark-mode .act-btn:hover { background: #1E1318; }
-body.dark-mode .pista-box { background: #1A1015; border-color: #5A2035; }
-body.dark-mode .pista-label { background: #1A1015; }
-body.dark-mode .oscar-bubble { background: #1A1015; border-color: #5A2035; color: #C8B8B0; }
-body.dark-mode .modal-overlay { background: rgba(5,2,4,0.8); }
+body.dark-mode .modal-header { background: #382440; }
+body.dark-mode .modal-titulo { color: #F5EEF8; }
+body.dark-mode .modal-fecha { color: #8A7090; }
+body.dark-mode .modal-desc { color: #D8C8DC; }
+body.dark-mode .modal-close { background: #3D2A40; border-color: #4A3550; color: #B8A0BC; }
+body.dark-mode .modal-body { background: #382440; }
+body.dark-mode .tip-box { background: #3D2A40; color: #8A7090; }
+body.dark-mode .act-btn { background: #3D2A40; border-color: #4A3550; color: #D8C8DC; }
+body.dark-mode .act-btn:hover { background: #4A3550; }
+body.dark-mode .pista-box { background: #3D2A40; border-color: #7A3550; }
+body.dark-mode .pista-label { background: #3D2A40; }
+body.dark-mode .oscar-bubble { background: #3D2A40; border-color: #7A3550; color: #D8C8DC; }
+body.dark-mode .modal-overlay { background: rgba(30,15,35,0.85); }
+
+
+/* ── PAPELITOS INTERACTIVOS ── */
+.papelito-section {
+  border-top: .5px solid var(--papel-oscuro);
+  padding: 1rem 1.5rem 0;
+  margin-top: 4px;
+}
+body.dark-mode .papelito-section { border-color: #4A3550; }
+
+.papelito-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.papelito-tab {
+  flex: 1;
+  padding: 7px 10px;
+  border-radius: 99px;
+  border: .5px solid var(--gris-claro);
+  background: transparent;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--gris);
+  transition: all .15s;
+  text-align: center;
+}
+.papelito-tab.active {
+  background: var(--rosa);
+  border-color: var(--rosa);
+  color: white;
+}
+body.dark-mode .papelito-tab { border-color: #4A3550; color: #B8A0BC; }
+body.dark-mode .papelito-tab.active { background: var(--rosa); border-color: var(--rosa); color: white; }
+
+.papelito-panel { display: none; }
+.papelito-panel.active { display: block; }
+
+.papelito-card {
+  background: white;
+  border: .5px dashed var(--rosa-medio);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 10px;
+  min-height: 90px;
+  position: relative;
+}
+body.dark-mode .papelito-card { background: #3D2A40; border-color: #7A3550; }
+
+.papelito-card.locked-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 6px;
+  opacity: .6;
+}
+.papelito-card.locked-card span { font-size: 11px; color: var(--gris); }
+
+.papelito-textarea {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--tinta);
+  resize: none;
+  min-height: 70px;
+  outline: none;
+  line-height: 1.7;
+}
+body.dark-mode .papelito-textarea { color: #D8C8DC; }
+
+.papelito-saved-text {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--tinta);
+  line-height: 1.7;
+  white-space: pre-line;
+}
+body.dark-mode .papelito-saved-text { color: #D8C8DC; }
+
+.papelito-autor {
+  font-size: 10px;
+  color: var(--rosa);
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.papelito-save-btn {
+  width: 100%;
+  padding: 9px;
+  border-radius: 99px;
+  border: none;
+  background: var(--rosa);
+  color: white;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity .15s;
+  margin-bottom: 4px;
+}
+.papelito-save-btn:hover { opacity: .88; }
+.papelito-save-btn:disabled { opacity: .4; cursor: default; }
 
 </style>
 </head>
@@ -454,7 +563,7 @@ body.dark-mode .modal-overlay { background: rgba(5,2,4,0.8); }
         <div class="regla"><span class="regla-num">2</span><span>Escribe lo tuyo primero. Puede ser lo que sea — una confesión, un pensamiento, lo que sientas ese día.</span></div>
         <div class="regla"><span class="regla-num">3</span><span>Toca <strong>"Guardar para Oscar"</strong> — tu papelito queda sellado.</span></div>
         <div class="regla"><span class="regla-num">4</span><span>El papelito de Oscar aparece <strong>solo cuando los dos hayan escrito</strong>. No antes.</span></div>
-        <div class="regla" style="border:none"><span class="regla-num">5</span><span>Las reglas del tesoro siguen igual — busca tu sorpresa antes de las <strong>9pm</strong>. A las 10pm puedes preguntar.</span></div>
+
       </div>
     </div>
     <button class="btn-enter" onclick="irA3()">Entrar al calendario 🕯️</button>
@@ -749,6 +858,16 @@ function abrirModal(n){
       rBtn.innerHTML = '✨ Ver las 10 razones';
       rBtn.onclick = abrirRazones;
       document.getElementById('lu-actions').appendChild(rBtn);
+    }
+    // Papelitos interactivos desde día 13
+    const existPapelito = document.getElementById('papelito-inject-'+n);
+    if(existPapelito) existPapelito.remove();
+    if(n >= 13){
+      const pDiv = document.createElement('div');
+      pDiv.id = 'papelito-inject-'+n;
+      pDiv.innerHTML = mostrarPapelitos(n);
+      document.getElementById('view-lu').appendChild(pDiv);
+      setTimeout(()=>renderTodosPapelitos(n), 50);
     }
   }
   document.getElementById('modal-overlay').classList.add('open');
@@ -1061,6 +1180,102 @@ function cerrarTarea() {
 document.getElementById('tarea-overlay')?.addEventListener('click', function(e) {
   if (e.target === this) cerrarTarea();
 });
+
+
+// ── PAPELITOS INTERACTIVOS ──
+const PAPELITO_START_DAY = 13;
+
+function mostrarPapelitos(n) {
+  if (n < PAPELITO_START_DAY) return '';
+  return `
+    <div class="papelito-section">
+      <div class="papelito-tabs">
+        <button class="papelito-tab active" onclick="switchTab(${n},'lu')" id="tab-lu-${n}">💌 Mi papelito</button>
+        <button class="papelito-tab" onclick="switchTab(${n},'oscar')" id="tab-oscar-${n}">✉️ Papelito de Oscar</button>
+      </div>
+      <div class="papelito-panel active" id="panel-lu-${n}">
+        <div id="papelito-lu-content-${n}"></div>
+      </div>
+      <div class="papelito-panel" id="panel-oscar-${n}">
+        <div id="papelito-oscar-content-${n}"></div>
+      </div>
+    </div>`;
+}
+
+function switchTab(n, who) {
+  ['lu','oscar'].forEach(w => {
+    document.getElementById('tab-'+w+'-'+n)?.classList.toggle('active', w===who);
+    document.getElementById('panel-'+w+'-'+n)?.classList.toggle('active', w===who);
+  });
+}
+
+function renderPapelito(n, who) {
+  const key = 'papelito_' + n + '_' + who;
+  const keyOther = 'papelito_' + n + (who==='lu'?'_oscar':'_lu');
+  const d = state.dias.find(x=>x.n===n);
+  const saved = d?.[key];
+  const otherSaved = d?.[keyOther];
+  const isLu = who === 'lu';
+  const label = isLu ? '✍️ Lu' : '✍️ Oscar';
+  const placeholder = isLu
+    ? 'Escribe algo para Oscar... puede ser lo que sea.'
+    : 'El papelito de Oscar aparecerá cuando los dos hayan escrito.';
+  const containerId = 'papelito-' + who + '-content-' + n;
+  const el = document.getElementById(containerId);
+  if (!el) return;
+
+  if (saved) {
+    // Already saved — show text
+    el.innerHTML = `
+      <div class="papelito-card">
+        <div class="papelito-autor">${label}</div>
+        <div class="papelito-saved-text">${saved}</div>
+      </div>`;
+  } else if (!isLu && !otherSaved) {
+    // Oscar's papelito — Lu hasn't written yet
+    el.innerHTML = `
+      <div class="papelito-card locked-card">
+        <span style="font-size:20px">🔒</span>
+        <span>Escribe tu papelito primero</span>
+      </div>`;
+  } else if (!isLu && otherSaved) {
+    // Lu wrote, Oscar hasn't — show locked
+    el.innerHTML = `
+      <div class="papelito-card locked-card">
+        <span style="font-size:20px">⏳</span>
+        <span>Oscar aún no ha escrito — vuelve pronto</span>
+      </div>`;
+  } else {
+    // Lu's panel — can write
+    el.innerHTML = `
+      <div class="papelito-card">
+        <div class="papelito-autor">${label}</div>
+        <textarea class="papelito-textarea" id="txt-${who}-${n}" placeholder="${placeholder}" maxlength="300"></textarea>
+      </div>
+      <button class="papelito-save-btn" onclick="guardarPapelito(${n},'${who}')">Guardar para Oscar 💌</button>`;
+  }
+}
+
+async function guardarPapelito(n, who) {
+  const txt = document.getElementById('txt-'+who+'-'+n)?.value?.trim();
+  if (!txt) return;
+  const btn = document.querySelector('.papelito-save-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Guardando...'; }
+
+  const d = state.dias.find(x=>x.n===n);
+  const key = 'papelito_' + n + '_' + who;
+  d[key] = txt;
+  guardarDatos();
+  await syncToGitHub();
+
+  renderPapelito(n, who);
+  renderPapelito(n, who==='lu'?'oscar':'lu');
+}
+
+function renderTodosPapelitos(n) {
+  renderPapelito(n, 'lu');
+  renderPapelito(n, 'oscar');
+}
 
 </script>
 
