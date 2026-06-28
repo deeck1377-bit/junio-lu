@@ -346,12 +346,15 @@ body.dark-mode .progress-wrap {
 }
 
 body.dark-mode .day-cell {
-  background: #382440;
-  border-color: #4A3550;
+  background: #3D2845;
+  border-color: #5A3D65;
 }
 
 body.dark-mode .day-cell.unlocked {
-  background: #3D2A40;
+  background: #3D2845;
+}
+body.dark-mode .day-cell.unlocked:hover {
+  background: #4A3555;
 }
 
 body.dark-mode .day-num-cell { color: #F5EEF8; }
@@ -779,8 +782,8 @@ function horaHoy(){
   return mx.getHours() + mx.getMinutes()/60;
 }
 function estaDesbloqueado(n){
-  if(state.isAdmin) return true;
-  return n <= diaHoy();
+  // Todos desbloqueados — junio ya casi termina
+  return true;
 }
 
 const state={dias:cargarDatos(),current:null,filtro:null,isAdmin:localStorage.getItem(ADMIN_KEY)==='true'};
