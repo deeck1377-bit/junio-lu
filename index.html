@@ -504,12 +504,7 @@ function horaHoy(){
 }
 function estaDesbloqueado(n){
   if(state.isAdmin) return true;
-  const hoy = diaHoy();
-  const hora = horaHoy();
-  // Todos los días se desbloquean a las 11am hora México
-  if(n < hoy) return true;
-  if(n === hoy) return hora >= 11;
-  return false;
+  return n <= diaHoy();
 }
 
 const state={dias:cargarDatos(),current:null,filtro:null,isAdmin:localStorage.getItem(ADMIN_KEY)==='true'};
