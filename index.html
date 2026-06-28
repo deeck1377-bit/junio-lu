@@ -617,7 +617,7 @@ function irA3() {
 
 <div class="vela-ambient"></div>
 <div class="app" id="app">
-  <div class="hora-banner">Búscalo antes de las <strong>9pm</strong> · Si no lo encontraste, a las <strong>10pm exactas</strong> puedes preguntar</div>
+  
   <div class="topbar">
     <span class="topbar-title">Junio para Lu ✦</span>
     <div class="topbar-right">
@@ -833,11 +833,11 @@ function renderLeyenda(){
   });
 }
 function renderCalendario(){
-  const g=document.getElementById('cal-grid');g.innerHTML='';
+  const g=document.getElementById('cal-grid');if(!g)return;g.innerHTML='';
   const done=state.dias.filter(d=>d.done).length;
-  document.getElementById('stat-done').textContent=done;
-  document.getElementById('progress-fill').style.width=(done/30*100).toFixed(1)+'%';
-  document.getElementById('prog-label').textContent=done+' de 30';
+  if(document.getElementById('stat-done'))document.getElementById('stat-done').textContent=done;
+  if(document.getElementById('progress-fill'))document.getElementById('progress-fill').style.width=(done/30*100).toFixed(1)+'%';
+  if(document.getElementById('prog-label'))document.getElementById('prog-label').textContent=done+' de 30';
   const hoy=diaHoy();
   for(let i=0;i<new Date(2026,5,1).getDay();i++){const e=document.createElement('div');e.className='day-cell empty';g.appendChild(e);}
   state.dias.forEach(d=>{
