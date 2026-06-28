@@ -744,8 +744,10 @@ const state={dias:cargarDatos(),current:null,filtro:null,isAdmin:localStorage.ge
 
 // ─── NAVEGACIÓN PANTALLAS ───
 function irA2() {
-  document.getElementById('screen1').style.display = 'none';
-  document.getElementById('screen2').style.display = 'flex';
+  const s1 = document.getElementById('screen1');
+  const s2 = document.getElementById('screen2');
+  if(s1) s1.style.display = 'none';
+  if(s2) { s2.style.display = 'flex'; s2.style.flexDirection = 'column'; s2.style.alignItems = 'center'; s2.style.justifyContent = 'center'; }
   window.scrollTo(0,0);
 }
 
