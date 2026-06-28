@@ -50,10 +50,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--papel);color:var(--tinta)
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--rosa),var(--dorado));border-radius:99px;transition:width .6s ease}
 .progress-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--gris);margin-top:5px}
 
-.legend-wrap{display:flex;flex-wrap:wrap;gap:5px;padding:.65rem 1.5rem;background:white;border-bottom:.5px solid var(--papel-oscuro)}
-.leg-chip{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--gris);padding:4px 10px;border-radius:99px;border:.5px solid var(--gris-claro);cursor:pointer;background:transparent;font-family:'DM Sans',sans-serif;transition:all .12s}
-.leg-chip.active{color:var(--tinta);border-color:var(--tinta);background:var(--papel-oscuro)}
-.leg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
 
 .cal-wrap{padding:1rem 1rem 3rem}
 .cal-grid-header{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px}
@@ -345,7 +342,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--papel);color:var(--tinta)
     <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
     <div class="progress-labels"><span>1 jun</span><span id="prog-label">0 de 30</span><span>🎂 30 jun</span></div>
   </div>
-  <div class="legend-wrap" id="legend-wrap"></div>
+  
   <div class="cal-wrap">
     <div class="cal-grid-header">
       <div class="cal-wday">Dom</div><div class="cal-wday">Lun</div><div class="cal-wday">Mar</div>
@@ -505,7 +502,7 @@ function entrar(){
   document.getElementById('portada').style.display='none';
   document.getElementById('app').classList.add('visible');
   document.getElementById('admin-fab-wrap').classList.add('visible');
-  renderLeyenda();renderCalendario();actualizarBadge();
+  renderCalendario();actualizarBadge();
   loadRemoteData();
   mostrarSpotifyBtn();
 }
