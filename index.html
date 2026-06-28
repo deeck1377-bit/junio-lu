@@ -11,28 +11,84 @@
   --dorado:#BA7517;--dorado-claro:#FAEEDA;
   --verde:#1D9E75;--verde-claro:#EAF3DE;
   --tinta:#1A1014;--papel:#FDF8F4;--papel-oscuro:#EDE5DA;
-  --gris:#8A7F7A;--gris-claro:#E8E0D8;--lock:#C4BAB4;
+  --gris:#8A7F7A;--gris-claro:#E8E0D8;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--papel);color:var(--tinta);min-height:100vh}
+body{font-family:'DM Sans',sans-serif;background:var(--papel);color:var(--tinta);min-height:100vh;transition:background .5s,color .5s}
 
-.portada{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2.5rem 1.5rem;position:relative;overflow:hidden}
-.portada::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 20% 20%,rgba(244,192,209,.25) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 80% 80%,rgba(250,199,117,.2) 0%,transparent 60%);pointer-events:none}
-.portada-chip{font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--rosa);border:.5px solid var(--rosa-medio);padding:5px 18px;border-radius:99px;margin-bottom:2rem;background:var(--rosa-claro);position:relative}
-.portada h1{font-family:'Playfair Display',serif;font-size:clamp(52px,12vw,96px);font-weight:400;line-height:1.05;margin-bottom:.4rem;position:relative}
-.portada h1 em{font-style:italic;color:var(--rosa)}
-.portada-sub{font-size:14px;color:var(--gris);font-weight:300;margin-bottom:2.5rem;letter-spacing:.04em;position:relative}
-.portada-reglas{background:white;border:.5px solid var(--papel-oscuro);border-radius:18px;padding:1.75rem 2rem;max-width:420px;width:100%;text-align:left;position:relative;margin-bottom:2rem}
-.portada-reglas::before{content:'Las reglas del juego';font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:var(--gris);position:absolute;top:-10px;left:22px;background:white;padding:0 8px}
+/* ── DARK MODE ── */
+body.dark{
+  --papel:#2D1F2E;--papel-oscuro:#3D2A3E;--tinta:#F5EEF8;
+  --gris:#B8A0BC;--gris-claro:#4A3550;
+  --rosa:#E8829A;--rosa-claro:#3D2035;--rosa-medio:#7A3550;
+  background:#2D1F2E;
+}
+body.dark .topbar{background:#2D1F2E;border-color:#3D2A3E}
+body.dark .day-cell{background:#3D2845;border-color:#5A3D65}
+body.dark .day-cell:hover{background:#4A3555}
+body.dark .day-num-cell{color:#F5EEF8}
+body.dark .day-label-cell{color:#8A7090}
+body.dark .cal-wday{color:#6A5070}
+body.dark .progress-wrap{background:#2D1F2E;border-color:#3D2A3E}
+body.dark .progress-track{background:#4A3550}
+body.dark .topbar-title{color:#F5EEF8}
+body.dark .topbar-btn{color:#B8A0BC;border-color:#4A3550}
+body.dark .mode-badge.lu{background:#3D2035;color:var(--rosa);border-color:#7A3550}
+body.dark .modal-card{background:#3D2845}
+body.dark .modal-header{background:#3D2845;border-color:#4A3550}
+body.dark .modal-titulo{color:#F5EEF8}
+body.dark .modal-fecha{color:#8A7090}
+body.dark .modal-desc{color:#D8C8DC}
+body.dark .modal-close{background:#4A3550;border-color:#5A3D65;color:#B8A0BC}
+body.dark .modal-body{background:#3D2845}
+body.dark .tip-box{background:#4A3550;color:#8A7090}
+body.dark .act-btn{background:#4A3550;border-color:#5A3D65;color:#D8C8DC}
+body.dark .act-btn:hover{background:#5A3D65}
+body.dark .modal-overlay{background:rgba(20,10,25,.85)}
+body.dark .topbar-stat{color:#B8A0BC;border-color:#4A3550}
+
+/* ── SCREENS ── */
+.screen{display:none;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2.5rem 1.5rem;position:relative;overflow:hidden}
+.screen.active{display:flex}
+.screen::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 20% 20%,rgba(244,192,209,.22) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 80% 80%,rgba(250,199,117,.18) 0%,transparent 60%);pointer-events:none}
+
+.chip{font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;padding:5px 18px;border-radius:99px;margin-bottom:1.75rem;display:inline-block}
+.chip-error{background:#1a1a2e;color:#e0a96d;border:.5px solid #e0a96d44}
+.chip-rosa{background:var(--rosa-claro);color:var(--rosa);border:.5px solid var(--rosa-medio)}
+
+.screen h1{font-family:'Playfair Display',serif;font-size:clamp(40px,10vw,88px);font-weight:400;line-height:1.05;margin-bottom:.4rem}
+.screen h1 em{font-style:italic;color:var(--rosa)}
+.screen-sub{font-size:14px;color:var(--gris);font-weight:300;margin-bottom:2rem;max-width:340px;line-height:1.65}
+
+.error-log{background:white;border:.5px solid var(--papel-oscuro);border-radius:16px;padding:1.5rem;max-width:380px;width:100%;text-align:left;margin-bottom:2rem}
+.error-log-title{font-size:11px;color:var(--gris);font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.log-line{font-size:12px;line-height:2.2;font-family:monospace}
+.log-err{color:#e05c5c}
+.log-warn{color:#e0a96d}
+.log-ok{color:#1D9E75}
+
+.reglas-box{background:white;border:.5px solid var(--papel-oscuro);border-radius:18px;padding:1.75rem;max-width:400px;width:100%;text-align:left;margin-bottom:2rem;position:relative}
+.reglas-box::before{content:'Cómo funciona';font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:var(--gris);position:absolute;top:-10px;left:22px;background:white;padding:0 8px}
 .regla{display:flex;gap:14px;align-items:flex-start;padding:9px 0;border-bottom:.5px dashed var(--papel-oscuro);font-size:13.5px;line-height:1.6}
 .regla:last-child{border-bottom:none}
 .regla-num{font-family:'Playfair Display',serif;font-size:22px;color:var(--rosa);line-height:1;flex-shrink:0;width:20px}
-.btn-enter{background:var(--tinta);color:white;border:none;padding:13px 32px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:transform .15s,opacity .15s}
-.btn-enter:hover{transform:translateY(-1px);opacity:.87}
 
+.btn-main{background:var(--tinta);color:white;border:none;padding:13px 32px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:transform .15s,opacity .15s;position:relative}
+.btn-main:hover{transform:translateY(-1px);opacity:.87}
+.btn-main:active{transform:scale(.97)}
+
+/* ── TRANSITION OVERLAY ── */
+#overlay-transition{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#2D1F2E;opacity:0;pointer-events:none;transition:opacity .5s}
+#overlay-transition.show{opacity:1;pointer-events:all}
+.candle-icon{font-size:56px;animation:flicker 1.5s ease-in-out infinite;margin-bottom:12px}
+.candle-text{color:#F5EEF8;font-family:'Playfair Display',serif;font-style:italic;font-size:17px;opacity:.85}
+@keyframes flicker{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.75;transform:scale(.96)}}
+
+/* ── APP ── */
 .app{display:none}
 .app.visible{display:block}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.5rem;border-bottom:.5px solid var(--papel-oscuro);background:white;position:sticky;top:0;z-index:20}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.5rem;border-bottom:.5px solid var(--papel-oscuro);background:var(--papel);position:sticky;top:0;z-index:20}
 .topbar-title{font-family:'Playfair Display',serif;font-size:17px;font-style:italic}
 .topbar-right{display:flex;gap:8px;align-items:center}
 .topbar-stat{font-size:12px;color:var(--gris);padding:4px 12px;border-radius:99px;border:.5px solid var(--gris-claro)}
@@ -43,597 +99,200 @@ body{font-family:'DM Sans',sans-serif;background:var(--papel);color:var(--tinta)
 .mode-badge.admin{background:var(--tinta);color:white}
 .mode-badge.lu{background:var(--rosa-claro);color:var(--rosa);border:.5px solid var(--rosa-medio)}
 
-.hora-banner{background:var(--tinta);color:rgba(255,255,255,.85);text-align:center;padding:10px 16px;font-size:12.5px;line-height:1.5}
-.hora-banner strong{color:#F4C0D1}
-.progress-wrap{padding:.9rem 1.5rem .5rem;background:white;border-bottom:.5px solid var(--papel-oscuro)}
+.progress-wrap{padding:.9rem 1.5rem .5rem;background:var(--papel);border-bottom:.5px solid var(--papel-oscuro)}
 .progress-track{height:3px;background:var(--papel-oscuro);border-radius:99px;overflow:hidden}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--rosa),var(--dorado));border-radius:99px;transition:width .6s ease}
 .progress-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--gris);margin-top:5px}
-
-
 
 .cal-wrap{padding:1rem 1rem 3rem}
 .cal-grid-header{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px}
 .cal-wday{text-align:center;font-size:10px;font-weight:500;color:var(--gris);letter-spacing:.08em;text-transform:uppercase;padding:5px 0}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+
 .day-cell{position:relative;aspect-ratio:1;border-radius:10px;border:.5px solid var(--gris-claro);background:white;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;transition:transform .12s,box-shadow .12s;overflow:hidden}
 .day-cell.empty{background:transparent;border-color:transparent;cursor:default}
 .day-cell.empty:hover{transform:none}
-.day-cell.locked{background:var(--papel);border-color:var(--papel-oscuro);cursor:default}
-.day-cell.locked:hover{transform:none;box-shadow:none}
-.day-cell.locked .day-num-cell{color:var(--lock)}
-.day-cell.unlocked:hover{transform:scale(1.06);box-shadow:0 4px 18px rgba(0,0,0,.09);z-index:2}
+.day-cell:not(.empty):hover{transform:scale(1.06);box-shadow:0 4px 18px rgba(0,0,0,.09);z-index:2}
+.day-cell.cumple{border:2px solid var(--dorado)!important}
 .day-cell.hoy{border-width:1.5px;animation:hoy-pulse 2.5s ease-in-out infinite}
 @keyframes hoy-pulse{0%,100%{box-shadow:0 0 0 0 rgba(212,83,126,0)}50%{box-shadow:0 0 0 7px rgba(212,83,126,.15)}}
-.day-cell.cumple{border:2px solid var(--dorado)!important}
-.day-cell.dimmed{opacity:.3}
 .done-check{position:absolute;top:3px;right:4px;width:13px;height:13px;border-radius:50%;background:var(--verde);display:flex;align-items:center;justify-content:center;font-size:8px;color:white;font-weight:700}
 .day-num-cell{font-size:12px;font-weight:500;color:var(--tinta);line-height:1}
 .day-icon-cell{font-size:17px}
 .day-label-cell{font-size:7px;color:var(--gris);text-align:center;line-height:1.2;padding:0 2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:98%}
-.lock-icon{font-size:13px;color:var(--lock);opacity:.6}
 
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,16,20,.5);z-index:100;align-items:flex-start;justify-content:center;padding:1.5rem 1rem 2rem;overflow-y:auto;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,16,20,.5);z-index:100;align-items:flex-start;justify-content:center;padding:1.5rem 1rem 2rem;overflow-y:auto;backdrop-filter:blur(3px)}
 .modal-overlay.open{display:flex}
 .modal-card{background:var(--papel);border-radius:20px;width:100%;max-width:400px;position:relative;overflow:hidden;margin-top:1.5rem;box-shadow:0 20px 60px rgba(0,0,0,.18);animation:slideUp .2s ease}
 @keyframes slideUp{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
 .modal-header{padding:1.5rem 1.5rem 1rem;border-bottom:.5px solid var(--papel-oscuro);position:relative;background:white}
+body.dark .modal-header{background:#3D2845}
 .modal-close{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;border:.5px solid var(--gris-claro);background:var(--papel);cursor:pointer;font-size:14px;color:var(--gris);display:flex;align-items:center;justify-content:center;transition:background .12s}
 .modal-close:hover{background:var(--papel-oscuro)}
 .modal-fecha{font-size:11.5px;color:var(--gris);font-style:italic;margin-bottom:6px}
 .modal-badge{font-size:11px;font-weight:500;padding:4px 12px;border-radius:99px;display:inline-flex;align-items:center;gap:5px;margin-bottom:8px}
 .modal-titulo{font-family:'Playfair Display',serif;font-size:21px;font-weight:400;line-height:1.25;padding-right:20px}
 .modal-body{padding:1.25rem 1.5rem}
-.sorpresa-box{background:white;border:.5px dashed var(--papel-oscuro);border-radius:12px;padding:2rem 1.5rem;text-align:center;margin-bottom:14px}
-.sorpresa-icon{font-size:40px;margin-bottom:12px}
-.sorpresa-title{font-family:'Playfair Display',serif;font-size:16px;margin-bottom:6px}
-.sorpresa-sub{font-size:13px;color:var(--gris);line-height:1.5}
-.pista-box{background:white;border:.5px dashed var(--rosa-medio);border-radius:12px;padding:1rem 1.25rem;margin-bottom:14px;position:relative}
-.pista-label{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--rosa);position:absolute;top:-8px;left:14px;background:white;padding:0 6px}
-.pista-text{font-size:13.5px;color:var(--tinta);line-height:1.7;font-style:italic;white-space:pre-line}
 .modal-desc{font-size:14px;line-height:1.7;margin-bottom:14px}
 .tip-box{background:var(--papel-oscuro);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--gris);line-height:1.6;margin-bottom:14px}
-.pista-edit-wrap{display:none;margin-top:10px}
-.pista-edit-wrap.open{display:block}
-.pista-edit-wrap textarea{width:100%;font-size:13px;font-style:italic;font-family:'DM Sans',sans-serif;padding:8px 10px;border-radius:8px;border:.5px solid var(--rosa-medio);background:var(--rosa-claro);color:var(--tinta);resize:vertical;min-height:80px;line-height:1.6}
-.edit-section{display:none;border-top:.5px solid var(--papel-oscuro);padding:1rem 1.5rem}
-.edit-section.open{display:block}
-.edit-label{font-size:10px;font-weight:500;color:var(--gris);letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px;margin-top:12px}
-.edit-label:first-child{margin-top:0}
-.edit-section input,.edit-section textarea{width:100%;font-size:13px;padding:8px 10px;border-radius:8px;border:.5px solid var(--gris-claro);background:white;color:var(--tinta);font-family:'DM Sans',sans-serif;line-height:1.5}
-.edit-section textarea{resize:vertical;min-height:65px}
 .modal-actions{display:flex;gap:7px;padding:.25rem 1.5rem 1.5rem;flex-wrap:wrap}
 .act-btn{font-size:12px;padding:7px 14px;border-radius:99px;border:.5px solid var(--gris-claro);background:white;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--tinta);transition:all .12s;display:flex;align-items:center;gap:5px}
 .act-btn:hover{background:var(--papel-oscuro)}
 .act-btn.success{border-color:var(--verde);color:var(--verde);background:var(--verde-claro)}
 .act-btn.primary{background:var(--tinta);color:white;border-color:var(--tinta)}
 .act-btn.primary:hover{opacity:.85}
+.oscar-btn{background:linear-gradient(135deg,var(--rosa),#c0507a);color:white;border:none;padding:8px 16px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:transform .15s;display:flex;align-items:center;gap:6px}
+.oscar-btn:hover{transform:translateY(-1px)}
+.oscar-bubble{display:none;background:white;border:.5px solid var(--rosa-medio);border-radius:14px;padding:12px 16px;margin:0 1.5rem 1rem;font-size:13px;color:var(--tinta);line-height:1.6;font-style:italic;text-align:center;position:relative;animation:bubbleIn .25s ease}
+.oscar-bubble.show{display:block}
+@keyframes bubbleIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* ADMIN */
+.edit-section{display:none;border-top:.5px solid var(--papel-oscuro);padding:1rem 1.5rem}
+.edit-section.open{display:block}
+.edit-label{font-size:10px;font-weight:500;color:var(--gris);letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px;margin-top:12px}
+.edit-label:first-child{margin-top:0}
+.edit-section input,.edit-section textarea{width:100%;font-size:13px;padding:8px 10px;border-radius:8px;border:.5px solid var(--gris-claro);background:white;color:var(--tinta);font-family:'DM Sans',sans-serif;line-height:1.5}
+.edit-section textarea{resize:vertical;min-height:65px}
+.pista-box{background:white;border:.5px dashed var(--rosa-medio);border-radius:12px;padding:1rem 1.25rem;margin-bottom:14px;position:relative}
+.pista-label{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--rosa);position:absolute;top:-8px;left:14px;background:white;padding:0 6px}
+body.dark .pista-label{background:#3D2845}
+body.dark .pista-box{background:#4A3550;border-color:#7A3550}
+.pista-text{font-size:13.5px;color:var(--tinta);line-height:1.7;font-style:italic;white-space:pre-line}
+.pista-edit-wrap{display:none;margin-top:10px}
+.pista-edit-wrap.open{display:block}
+.pista-edit-wrap textarea{width:100%;font-size:13px;font-style:italic;font-family:'DM Sans',sans-serif;padding:8px 10px;border-radius:8px;border:.5px solid var(--rosa-medio);background:var(--rosa-claro);color:var(--tinta);resize:vertical;min-height:80px;line-height:1.6}
+
+/* PAPELITOS */
+.papelito-wrap{border-top:.5px solid var(--papel-oscuro);padding:1rem 1.5rem .5rem}
+.papelito-tabs{display:flex;gap:6px;margin-bottom:12px}
+.p-tab{flex:1;padding:7px 10px;border-radius:99px;border:.5px solid var(--gris-claro);background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;color:var(--gris);transition:all .15s;text-align:center}
+.p-tab.active{background:var(--rosa);border-color:var(--rosa);color:white}
+.p-panel{display:none}
+.p-panel.active{display:block}
+.p-card{background:white;border:.5px dashed var(--rosa-medio);border-radius:12px;padding:1rem;margin-bottom:10px;min-height:80px}
+body.dark .p-card{background:#4A3550;border-color:#7A3550}
+.p-autor{font-size:10px;color:var(--rosa);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.p-textarea{width:100%;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-style:italic;color:var(--tinta);resize:none;min-height:70px;outline:none;line-height:1.7}
+body.dark .p-textarea{color:#D8C8DC}
+.p-saved{font-size:13px;font-style:italic;color:var(--tinta);line-height:1.7;white-space:pre-line}
+body.dark .p-saved{color:#D8C8DC}
+.p-locked{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:80px;opacity:.6}
+.p-locked span{font-size:11px;color:var(--gris)}
+.p-save-btn{width:100%;padding:9px;border-radius:99px;border:none;background:var(--rosa);color:white;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;margin-bottom:4px;transition:opacity .15s}
+.p-save-btn:hover{opacity:.88}
+.p-save-btn:disabled{opacity:.4;cursor:default}
+
+/* SYNC BADGE */
+#sync-badge{position:fixed;bottom:5rem;right:1.5rem;background:var(--tinta);color:white;font-size:12px;padding:8px 16px;border-radius:99px;z-index:300;font-family:'DM Sans',sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.2);transition:opacity .4s;display:none}
+
+/* ADMIN FAB */
 .admin-fab-wrap{display:none;position:fixed;bottom:1.5rem;right:1.5rem;z-index:50}
 .admin-fab-wrap.visible{display:block}
 .admin-fab{width:44px;height:44px;border-radius:50%;background:var(--tinta);color:white;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.2);transition:transform .15s}
 .admin-fab:hover{transform:scale(1.08)}
-@media(max-width:480px){.topbar-stat{display:none}.cal-wrap{padding:.75rem .5rem 3rem}.day-label-cell{display:none}.portada-reglas{padding:1.5rem}}
+
+/* SPOTIFY */
+.spotify-secret{position:fixed;top:12px;left:12px;z-index:30;opacity:.18;transition:opacity .3s;cursor:pointer;background:none;border:none;padding:4px;display:none}
+.spotify-secret:hover{opacity:.35}
 
 /* CONFETTI */
-#confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;}
-/* OSCAR BUTTON */
-.oscar-btn{background:linear-gradient(135deg,var(--rosa),#c0507a);color:white;border:none;padding:8px 16px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:transform .15s,opacity .15s;display:flex;align-items:center;gap:6px;}
-.oscar-btn:hover{transform:translateY(-1px);opacity:.9;}
-.oscar-bubble{display:none;background:white;border:.5px solid var(--rosa-medio);border-radius:14px;padding:12px 16px;margin:0 1.5rem 1rem;font-size:13px;color:var(--tinta);line-height:1.6;font-style:italic;text-align:center;position:relative;animation:bubbleIn .25s ease;}
-.oscar-bubble.show{display:block;}
-@keyframes bubbleIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
-.oscar-bubble::before{content:'💭';position:absolute;top:-12px;left:50%;transform:translateX(-50%);font-size:18px;}
-/* FOUND CELEBRATION */
-.found-overlay{display:none;position:fixed;inset:0;background:rgba(26,16,20,.6);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
-.found-overlay.show{display:flex;}
-.found-card{background:white;border-radius:24px;padding:2.5rem 2rem;text-align:center;max-width:320px;width:90%;animation:foundPop .3s cubic-bezier(.34,1.56,.64,1);}
+#confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
+
+/* FOUND OVERLAY */
+.found-overlay{display:none;position:fixed;inset:0;background:rgba(26,16,20,.6);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.found-overlay.show{display:flex}
+.found-card{background:white;border-radius:24px;padding:2.5rem 2rem;text-align:center;max-width:320px;width:90%;animation:foundPop .3s cubic-bezier(.34,1.56,.64,1)}
+body.dark .found-card{background:#3D2845}
 @keyframes foundPop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
-.found-emoji{font-size:52px;margin-bottom:12px;}
-.found-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:400;color:var(--tinta);margin-bottom:8px;}
-.found-msg{font-size:13px;color:var(--gris);line-height:1.6;margin-bottom:1.5rem;}
-.found-close{background:var(--tinta);color:white;border:none;padding:10px 28px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;}
+.found-emoji{font-size:52px;margin-bottom:12px}
+.found-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:400;color:var(--tinta);margin-bottom:8px}
+body.dark .found-title{color:#F5EEF8}
+.found-msg{font-size:13px;color:var(--gris);line-height:1.6;margin-bottom:1.5rem}
+.found-close{background:var(--tinta);color:white;border:none;padding:10px 28px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer}
 
-/* SPOTIFY SECRET BUTTON */
-.spotify-secret {
-  position: fixed;
-  top: 12px;
-  left: 12px;
-  z-index: 30;
-  opacity: 0.18;
-  transition: opacity 0.3s;
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 4px;
-}
-.spotify-secret:hover { opacity: 0.35; }
-.spotify-secret svg { width: 22px; height: 22px; }
-
-/* SPOTIFY MODAL */
-.spotify-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(26,16,20,0.6);
-  z-index: 400;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  backdrop-filter: blur(4px);
-}
-.spotify-overlay.open { display: flex; }
-.spotify-card {
-  background: white;
-  border-radius: 20px;
-  width: 100%;
-  max-width: 340px;
-  overflow: hidden;
-  animation: slideUp .22s ease;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-}
-.spotify-photo {
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-}
-.spotify-body {
-  padding: 1.25rem 1.5rem 1.5rem;
-}
-.spotify-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 18px;
-  font-weight: 400;
-  color: #1A1014;
-  margin-bottom: 6px;
-}
-.spotify-sub {
-  font-size: 12px;
-  color: #8A7F7A;
-  margin-bottom: 14px;
-  line-height: 1.5;
-}
-.spotify-input-wrap { margin-bottom: 12px; }
-.spotify-input {
-  width: 100%;
-  font-size: 14px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1.5px solid #E8E0D8;
-  font-family: 'DM Sans', sans-serif;
-  color: #1A1014;
-  outline: none;
-  transition: border-color .15s;
-}
-.spotify-input:focus { border-color: #1DB954; }
-.spotify-error {
-  font-size: 12px;
-  color: #D4537E;
-  margin-top: 6px;
-  display: none;
-}
-.spotify-error.show { display: block; }
-.spotify-actions { display: flex; gap: 8px; }
-.spotify-cancel {
-  flex: 1;
-  padding: 10px;
-  border-radius: 99px;
-  border: .5px solid #E8E0D8;
-  background: transparent;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  cursor: pointer;
-  color: #8A7F7A;
-}
-.spotify-unlock {
-  flex: 2;
-  padding: 10px;
-  border-radius: 99px;
-  border: none;
-  background: #1DB954;
-  color: white;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: opacity .15s;
-}
-.spotify-unlock:hover { opacity: .88; }
-/* Desbloqueado */
-.spotify-unlocked { display: none; text-align: center; padding: 1.5rem; }
-.spotify-unlocked.show { display: block; }
-.spotify-locked { }
-.spotify-locked.hide { display: none; }
-.spotify-qr-img {
-  width: 100%;
-  border-radius: 12px;
-  margin-bottom: 12px;
-}
-.spotify-song {
-  font-family: 'Playfair Display', serif;
-  font-size: 16px;
-  color: #1A1014;
-  margin-bottom: 4px;
-}
-.spotify-open-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #1DB954;
-  color: white;
-  padding: 10px 24px;
-  border-radius: 99px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  text-decoration: none;
-  margin-top: 12px;
-}
-
-
-/* 10 RAZONES MODAL */
-.razones-overlay{display:none;position:fixed;inset:0;background:rgba(26,16,20,.65);z-index:300;align-items:center;justify-content:center;padding:1.5rem 1rem;overflow-y:auto;backdrop-filter:blur(6px);}
-.razones-overlay.open{display:flex;}
-.razones-card{background:var(--papel);border-radius:24px;width:100%;max-width:380px;overflow:hidden;margin:auto;box-shadow:0 24px 64px rgba(0,0,0,.22);animation:slideUp .25s ease;}
-.razones-header{background:linear-gradient(135deg,#FBEAF0 0%,#FAEEDA 100%);padding:2rem 1.5rem 1.5rem;text-align:center;position:relative;}
-.razones-header-num{font-size:48px;font-family:'Playfair Display',serif;color:var(--rosa);line-height:1;margin-bottom:6px;font-weight:400;}
-.razones-header-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:400;color:var(--tinta);line-height:1.3;}
-.razones-header-sub{font-size:12px;color:var(--gris);margin-top:5px;}
-.razones-body{padding:1.25rem 1.5rem 1.5rem;}
-.razon-item{display:flex;gap:14px;align-items:flex-start;padding:10px 0;border-bottom:.5px dashed var(--papel-oscuro);animation:razonIn .4s ease both;}
-.razon-item:last-child{border-bottom:none;}
+/* RAZONES */
+.razones-overlay{display:none;position:fixed;inset:0;background:rgba(26,16,20,.65);z-index:300;align-items:center;justify-content:center;padding:1.5rem 1rem;overflow-y:auto;backdrop-filter:blur(6px)}
+.razones-overlay.open{display:flex}
+.razones-card{background:var(--papel);border-radius:24px;width:100%;max-width:380px;overflow:hidden;margin:auto;box-shadow:0 24px 64px rgba(0,0,0,.22);animation:slideUp .25s ease}
+.razones-header{background:linear-gradient(135deg,#FBEAF0,#FAEEDA);padding:2rem 1.5rem 1.5rem;text-align:center}
+.razones-num{font-size:48px;font-family:'Playfair Display',serif;color:var(--rosa);line-height:1;margin-bottom:6px}
+.razones-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:400;color:var(--tinta);line-height:1.3}
+.razones-sub{font-size:12px;color:var(--gris);margin-top:5px}
+.razones-body{padding:1.25rem 1.5rem 1.5rem}
+.razon-item{display:flex;gap:14px;align-items:flex-start;padding:10px 0;border-bottom:.5px dashed var(--papel-oscuro);animation:razonIn .4s ease both}
+.razon-item:last-child{border-bottom:none}
 @keyframes razonIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.razon-num{font-family:'Playfair Display',serif;font-size:24px;color:var(--rosa);font-weight:400;line-height:1;flex-shrink:0;width:28px;}
-.razon-content{}
-.razon-title{font-size:14px;font-weight:500;color:var(--tinta);line-height:1.4;}
-.razon-desc{font-size:12px;color:var(--gris);line-height:1.5;margin-top:2px;font-style:italic;}
-.razones-footer{padding:0 1.5rem 1.5rem;text-align:center;}
-.razones-close-btn{background:var(--tinta);color:white;border:none;padding:10px 32px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .15s;}
-.razones-close-btn:hover{opacity:.85;}
-/* Boton ver lista en modal dia 12 */
-.ver-lista-btn{background:linear-gradient(135deg,var(--rosa),#c0507a);color:white;border:none;padding:8px 20px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;transition:transform .15s,opacity .15s;}
-.ver-lista-btn:hover{transform:translateY(-1px);opacity:.9;}
+.razon-num{font-family:'Playfair Display',serif;font-size:24px;color:var(--rosa);font-weight:400;line-height:1;flex-shrink:0;width:28px}
+.razon-ttl{font-size:14px;font-weight:500;color:var(--tinta);line-height:1.4}
+.razon-desc{font-size:12px;color:var(--gris);line-height:1.5;margin-top:2px;font-style:italic}
+.razones-footer{padding:0 1.5rem 1.5rem;text-align:center}
+.razones-close-btn{background:var(--tinta);color:white;border:none;padding:10px 32px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
+.ver-lista-btn{background:linear-gradient(135deg,var(--rosa),#c0507a);color:white;border:none;padding:8px 20px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px}
 
-
-/* MODAL TAREA CUADERNO */
-.tarea-overlay{display:none;position:fixed;inset:0;background:rgba(26,16,20,.65);z-index:300;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(6px);}
-.tarea-overlay.open{display:flex;}
-.tarea-card{background:white;border-radius:24px;width:100%;max-width:360px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.22);animation:slideUp .25s ease;}
-.tarea-header{padding:2rem 1.5rem 1.25rem;text-align:center;}
-.tarea-emoji{font-size:48px;margin-bottom:12px;}
-.tarea-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:400;color:var(--tinta);line-height:1.3;margin-bottom:8px;}
-.tarea-msg{font-size:13px;color:var(--gris);line-height:1.65;padding:0 .5rem;}
-.tarea-recordatorio{background:var(--dorado-claro);border:.5px solid #E8C97A;border-radius:12px;padding:12px 16px;margin:1rem 1.5rem;font-size:13px;color:#7A5000;line-height:1.6;text-align:center;}
-.tarea-recordatorio strong{display:block;font-size:14px;margin-bottom:4px;color:#5A3800;}
-.tarea-footer{padding:.5rem 1.5rem 1.5rem;text-align:center;}
-.tarea-close{background:var(--tinta);color:white;border:none;padding:10px 32px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
-
-
-/* PANTALLAS PORTADA */
-.p-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2.5rem 1.5rem;text-align:center;position:relative;}
-
-/* TRANSICIÓN APAGAR LUCES */
-.lights-off {
-  animation: lightsOff 1.8s ease forwards;
-}
-@keyframes lightsOff {
-  0%   { opacity: 1; filter: brightness(1); }
-  40%  { opacity: 1; filter: brightness(0.15); }
-  60%  { opacity: 1; filter: brightness(0.05); }
-  100% { opacity: 1; filter: brightness(1); }
-}
-
-/* TEMA OSCURO DEL CALENDARIO */
-body.dark-mode {
-  --papel: #2D1F2E;
-  --papel-oscuro: #3D2A3E;
-  --tinta: #F5EEF8;
-  --gris: #B8A0BC;
-  --gris-claro: #4A3550;
-  --rosa: #E8829A;
-  --rosa-claro: #3D2035;
-  --rosa-medio: #7A3550;
-  --dorado: #E0A855;
-  --dorado-claro: #3D2E10;
-  background: #2D1F2E;
-}
-
-body.dark-mode .topbar,
-body.dark-mode .progress-wrap {
-  background: #2D1F2E;
-  border-color: #3D2A3E;
-}
-
-body.dark-mode .day-cell {
-  background: #3D2845;
-  border-color: #5A3D65;
-}
-
-body.dark-mode .day-cell.unlocked {
-  background: #3D2845;
-}
-body.dark-mode .day-cell.unlocked:hover {
-  background: #4A3555;
-}
-
-body.dark-mode .day-num-cell { color: #F5EEF8; }
-body.dark-mode .day-label-cell { color: #8A7090; }
-
-body.dark-mode .hora-banner {
-  background: #241828;
-  color: rgba(245,238,248,.85);
-}
-
-body.dark-mode .progress-track {
-  background: #4A3550;
-}
-
-/* VELA AMBIENTAL */
-.vela-ambient {
-  display: none;
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  height: 120px;
-  background: linear-gradient(to top, rgba(224,168,85,0.12), transparent);
-  pointer-events: none;
-  z-index: 1;
-}
-body.dark-mode .vela-ambient { display: block; }
-
-/* TOPBAR DARK */
-body.dark-mode .topbar-title { color: #F2E8E0; }
-body.dark-mode .topbar-btn {
-  color: #8A7A74;
-  border-color: #2A1E22;
-}
-body.dark-mode .topbar-btn:hover { background: #1E1318; }
-body.dark-mode .mode-badge.lu {
-  background: #2A1018;
-  color: var(--rosa);
-  border-color: #5A2035;
-}
-body.dark-mode .cal-wday { color: #5A4A50; }
-
-
-body.dark-mode .modal-card,
-body.dark-mode .modal-header { background: #382440; }
-body.dark-mode .modal-titulo { color: #F5EEF8; }
-body.dark-mode .modal-fecha { color: #8A7090; }
-body.dark-mode .modal-desc { color: #D8C8DC; }
-body.dark-mode .modal-close { background: #3D2A40; border-color: #4A3550; color: #B8A0BC; }
-body.dark-mode .modal-body { background: #382440; }
-body.dark-mode .tip-box { background: #3D2A40; color: #8A7090; }
-body.dark-mode .act-btn { background: #3D2A40; border-color: #4A3550; color: #D8C8DC; }
-body.dark-mode .act-btn:hover { background: #4A3550; }
-body.dark-mode .pista-box { background: #3D2A40; border-color: #7A3550; }
-body.dark-mode .pista-label { background: #3D2A40; }
-body.dark-mode .oscar-bubble { background: #3D2A40; border-color: #7A3550; color: #D8C8DC; }
-body.dark-mode .modal-overlay { background: rgba(30,15,35,0.85); }
-
-
-/* ── PAPELITOS INTERACTIVOS ── */
-.papelito-section {
-  border-top: .5px solid var(--papel-oscuro);
-  padding: 1rem 1.5rem 0;
-  margin-top: 4px;
-}
-body.dark-mode .papelito-section { border-color: #4A3550; }
-
-.papelito-tabs {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 12px;
-}
-.papelito-tab {
-  flex: 1;
-  padding: 7px 10px;
-  border-radius: 99px;
-  border: .5px solid var(--gris-claro);
-  background: transparent;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  cursor: pointer;
-  color: var(--gris);
-  transition: all .15s;
-  text-align: center;
-}
-.papelito-tab.active {
-  background: var(--rosa);
-  border-color: var(--rosa);
-  color: white;
-}
-body.dark-mode .papelito-tab { border-color: #4A3550; color: #B8A0BC; }
-body.dark-mode .papelito-tab.active { background: var(--rosa); border-color: var(--rosa); color: white; }
-
-.papelito-panel { display: none; }
-.papelito-panel.active { display: block; }
-
-.papelito-card {
-  background: white;
-  border: .5px dashed var(--rosa-medio);
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 10px;
-  min-height: 90px;
-  position: relative;
-}
-body.dark-mode .papelito-card { background: #3D2A40; border-color: #7A3550; }
-
-.papelito-card.locked-card {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 6px;
-  opacity: .6;
-}
-.papelito-card.locked-card span { font-size: 11px; color: var(--gris); }
-
-.papelito-textarea {
-  width: 100%;
-  border: none;
-  background: transparent;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  font-style: italic;
-  color: var(--tinta);
-  resize: none;
-  min-height: 70px;
-  outline: none;
-  line-height: 1.7;
-}
-body.dark-mode .papelito-textarea { color: #D8C8DC; }
-
-.papelito-saved-text {
-  font-size: 13px;
-  font-style: italic;
-  color: var(--tinta);
-  line-height: 1.7;
-  white-space: pre-line;
-}
-body.dark-mode .papelito-saved-text { color: #D8C8DC; }
-
-.papelito-autor {
-  font-size: 10px;
-  color: var(--rosa);
-  font-weight: 500;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-}
-
-.papelito-save-btn {
-  width: 100%;
-  padding: 9px;
-  border-radius: 99px;
-  border: none;
-  background: var(--rosa);
-  color: white;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: opacity .15s;
-  margin-bottom: 4px;
-}
-.papelito-save-btn:hover { opacity: .88; }
-.papelito-save-btn:disabled { opacity: .4; cursor: default; }
-
-</style>
-<script>
-function irA2() {
-  var s1 = document.getElementById('screen1');
-  var s2 = document.getElementById('screen2');
-  if (!s1 || !s2) return;
-  s1.style.display = 'none';
-  s2.style.display = 'flex';
-  s2.style.flexDirection = 'column';
-  s2.style.alignItems = 'center';
-  s2.style.justifyContent = 'center';
-  s2.style.minHeight = '100vh';
-  window.scrollTo(0, 0);
-}
-
-function irA3() {
-  var overlay = document.createElement('div');
-  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#2D1F2E;opacity:0;transition:opacity 0.6s ease;';
-  overlay.innerHTML = '<div style="font-size:48px;margin-bottom:16px">🕯️</div><div style="font-family:serif;font-size:18px;color:#F5EEF8;font-style:italic">Entrando...</div>';
-  document.body.appendChild(overlay);
-  setTimeout(function() { overlay.style.opacity = '1'; }, 20);
-  setTimeout(function() {
-    var portada = document.getElementById('portada');
-    var app = document.getElementById('app');
-    var fab = document.getElementById('admin-fab-wrap');
-    if (portada) portada.style.display = 'none';
-    if (app) app.classList.add('visible');
-    if (fab) fab.classList.add('visible');
-    document.body.classList.add('dark-mode');
-    if (typeof renderCalendario === 'function') renderCalendario();
-    if (typeof actualizarBadge === 'function') actualizarBadge();
-    if (typeof loadRemoteData === 'function') loadRemoteData();
-    if (typeof mostrarSpotifyBtn === 'function') mostrarSpotifyBtn();
-  }, 700);
-  setTimeout(function() {
-    overlay.style.opacity = '0';
-    setTimeout(function() { overlay.remove(); }, 700);
-  }, 1500);
-}
-</script>
-<style>
-@keyframes flicker {
-  0%,100% { opacity:1; transform:scale(1); }
-  50%      { opacity:.7; transform:scale(.95); }
-}
+@media(max-width:480px){.topbar-stat{display:none}.cal-wrap{padding:.75rem .5rem 3rem}.day-label-cell{display:none}}
 </style>
 </head>
 <body>
 
-<div class="portada" id="portada">
-  <!-- PANTALLA 1: DISCULPA -->
-  <div class="p-screen" id="screen1">
-    <div class="portada-chip" style="background:#1a1a2e;color:#e0a96d;border-color:#e0a96d44">⚠️ ERROR 503</div>
-    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(36px,8vw,72px);font-weight:400;margin-bottom:.5rem;color:var(--tinta)">
-      <em style="color:var(--rosa)">Disculpe</em><br>los inconvenientes
-    </h1>
-    <p style="font-size:13px;color:var(--gris);max-width:320px;line-height:1.7;margin-bottom:1.5rem">
-      <code style="background:var(--papel-oscuro);padding:2px 8px;border-radius:4px;font-size:11px">junio_lu_2026_v3</code> tuvo una caída inesperada de base de datos.<br>
-      Los ingenieros trabajaron horas extra (ejem, tu novio) para reconstruirlo todo.<br><br>
-      La buena noticia: <strong>la nueva versión es mejor, más íntima y ahora sí guarda todo.</strong>
-    </p>
-    <div style="background:white;border:.5px solid var(--papel-oscuro);border-radius:16px;padding:1.5rem;max-width:360px;width:100%;text-align:left;margin-bottom:2rem">
-      <div style="font-size:11px;color:var(--gris);font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">📋 Registro de errores</div>
-      <div style="font-size:12px;color:var(--gris);line-height:2;font-family:monospace">
-        <span style="color:#e05c5c">[ERR]</span> localStorage v3 corrupto<br>
-        <span style="color:#e05c5c">[ERR]</span> Upstash sync timeout × 47<br>
-        <span style="color:#e0a96d">[WARN]</span> El amor no cabe en 1.6MB<br>
-        <span style="color:#1D9E75">[OK]</span> Base de datos reconstruida ✓<br>
-        <span style="color:#1D9E75">[OK]</span> Junio v6 desplegado ✓<br>
-        <span style="color:#1D9E75">[OK]</span> Lu merece esto y más ✓
-      </div>
-    </div>
-    <button class="btn-enter" id="btn-continuar">Continuar →</button>
-  </div>
-
-  <!-- PANTALLA 2: INSTRUCCIONES -->
-  <div class="p-screen" id="screen2" style="display:none">
-    <div class="portada-chip">✦ Junio 2026 · Nueva versión</div>
-    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(38px,9vw,76px);font-weight:400;line-height:1.05;margin-bottom:.4rem">
-      Ahora <em style="color:var(--rosa)">escribimos</em>
-    </h1>
-    <p style="font-size:14px;color:var(--gris);margin-bottom:2rem;max-width:320px;line-height:1.6">
-      El calendario ya no es solo para ver — ahora es para confesarnos.
-    </p>
-    <div style="background:white;border:.5px solid var(--papel-oscuro);border-radius:18px;padding:1.75rem;max-width:380px;width:100%;text-align:left;margin-bottom:2rem;position:relative">
-      <div style="font-family:'Playfair Display',serif;font-size:12px;font-style:italic;color:var(--gris);position:absolute;top:-10px;left:22px;background:white;padding:0 8px">Cómo funciona</div>
-      <div style="display:flex;flex-direction:column;gap:0">
-        <div class="regla"><span class="regla-num">1</span><span>Cada día tiene <strong>dos papelitos</strong> — uno para ti, uno para Oscar.</span></div>
-        <div class="regla"><span class="regla-num">2</span><span>Escribe lo tuyo primero. Puede ser lo que sea — una confesión, un pensamiento, lo que sientas ese día.</span></div>
-        <div class="regla"><span class="regla-num">3</span><span>Toca <strong>"Guardar para Oscar"</strong> — tu papelito queda sellado.</span></div>
-        <div class="regla"><span class="regla-num">4</span><span>El papelito de Oscar aparece <strong>solo cuando los dos hayan escrito</strong>. No antes.</span></div>
-
-      </div>
-    </div>
-    <button class="btn-enter" id="btn-entrar">Entrar al calendario 🕯️</button>
-  </div>
+<!-- TRANSITION OVERLAY -->
+<div id="overlay-transition">
+  <div class="candle-icon">🕯️</div>
+  <div class="candle-text">Entrando...</div>
 </div>
 
-<div class="vela-ambient"></div>
+<!-- SCREEN 1: DISCULPA -->
+<div class="screen active" id="screen1">
+  <div class="chip chip-error">⚠️ ERROR 503</div>
+  <h1><em>Disculpe</em><br>los inconvenientes</h1>
+  <p class="screen-sub">
+    <code style="background:var(--papel-oscuro);padding:2px 8px;border-radius:4px;font-size:11px">junio_lu_2026_v3</code> tuvo una caída de base de datos.<br><br>
+    Los ingenieros trabajaron horas extra (ejem, tu novio) para reconstruirlo todo.<br><br>
+    <strong>La nueva versión es mejor, más íntima y ya guarda todo.</strong>
+  </p>
+  <div class="error-log">
+    <div class="error-log-title">📋 Registro de errores</div>
+    <div class="log-line">
+      <span class="log-err">[ERR]</span> localStorage v3 corrupto<br>
+      <span class="log-err">[ERR]</span> Upstash sync timeout × 47<br>
+      <span class="log-warn">[WARN]</span> El amor no cabe en 1.6MB<br>
+      <span class="log-ok">[OK]</span> Base de datos reconstruida ✓<br>
+      <span class="log-ok">[OK]</span> Junio v6 desplegado ✓<br>
+      <span class="log-ok">[OK]</span> Lu merece esto y más ✓
+    </div>
+  </div>
+  <button class="btn-main" id="btn-s1">Continuar →</button>
+</div>
+
+<!-- SCREEN 2: INSTRUCCIONES -->
+<div class="screen" id="screen2">
+  <div class="chip chip-rosa">✦ Junio 2026 · Nueva versión</div>
+  <h1>Ahora <em>escribimos</em></h1>
+  <p class="screen-sub">El calendario ya no es solo para ver — ahora es para confesarnos.</p>
+  <div class="reglas-box">
+    <div class="regla"><span class="regla-num">1</span><span>Cada día tiene <strong>dos papelitos</strong> — uno para ti, uno para Oscar.</span></div>
+    <div class="regla"><span class="regla-num">2</span><span>Escribe lo tuyo primero. Puede ser lo que sea — una confesión, un pensamiento, lo que sientas ese día.</span></div>
+    <div class="regla"><span class="regla-num">3</span><span>Toca <strong>"Guardar para Oscar"</strong> — tu papelito queda sellado.</span></div>
+    <div class="regla" style="border:none"><span class="regla-num">4</span><span>El papelito de Oscar aparece <strong>solo cuando los dos hayan escrito</strong>. No antes.</span></div>
+  </div>
+  <button class="btn-main" id="btn-s2">Entrar al calendario 🕯️</button>
+</div>
+
+<!-- APP -->
 <div class="app" id="app">
-  
   <div class="topbar">
     <span class="topbar-title">Junio para Lu ✦</span>
     <div class="topbar-right">
       <span class="topbar-stat">Encontrados: <strong id="stat-done">0</strong>/30</span>
       <span class="mode-badge lu" id="mode-badge">Lu 🌸</span>
-      <button class="topbar-btn" onclick="verPortada()">Reglas</button>
+      <button class="topbar-btn" id="btn-reglas">Reglas</button>
     </div>
   </div>
   <div class="progress-wrap">
     <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
     <div class="progress-labels"><span>1 jun</span><span id="prog-label">0 de 30</span><span>🎂 30 jun</span></div>
   </div>
-  
   <div class="cal-wrap">
     <div class="cal-grid-header">
       <div class="cal-wday">Dom</div><div class="cal-wday">Lun</div><div class="cal-wday">Mar</div>
@@ -643,23 +302,16 @@ function irA3() {
   </div>
 </div>
 
+<!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal-card">
     <div class="modal-header">
-      <button class="modal-close" onclick="closeModal()">✕</button>
+      <button class="modal-close" id="modal-close-btn">✕</button>
       <div class="modal-fecha" id="m-fecha"></div>
       <span class="modal-badge" id="m-badge"></span>
       <div class="modal-titulo" id="m-titulo"></div>
     </div>
-    <div id="view-locked" style="display:none">
-      <div class="modal-body">
-        <div class="sorpresa-box">
-          <div class="sorpresa-icon">🔒</div>
-          <div class="sorpresa-title">Este día todavía no llegó</div>
-          <div class="sorpresa-sub">Espera a que llegue el día — entonces aparecerá tu sorpresa.</div>
-        </div>
-      </div>
-    </div>
+    <!-- VISTA LU -->
     <div id="view-lu" style="display:none">
       <div class="modal-body">
         <div class="pista-box" id="pista-box" style="display:none">
@@ -669,917 +321,533 @@ function irA3() {
         <p class="modal-desc" id="m-desc-lu"></p>
       </div>
       <div class="modal-actions" id="lu-actions">
-        <button class="act-btn" id="lu-done-btn" onclick="toggleDone()"></button>
-        <button class="oscar-btn" onclick="pensarOscar()">💭 ¿Qué piensa Oscar?</button>
+        <button class="act-btn" id="lu-done-btn"></button>
+        <button class="oscar-btn" id="oscar-btn">💭 ¿Qué piensa Oscar?</button>
       </div>
       <div class="oscar-bubble" id="oscar-bubble"></div>
+      <div id="papelito-inject"></div>
     </div>
+    <!-- VISTA ADMIN -->
     <div id="view-admin" style="display:none">
       <div class="modal-body">
         <p class="modal-desc" id="m-desc-admin"></p>
         <div class="pista-box" style="position:relative;margin-bottom:14px">
           <div class="pista-label">📍 Pista para Lu</div>
-          <div class="pista-text" id="m-pista-admin" style="color:var(--gris);font-style:normal;font-size:12px"></div>
+          <div class="pista-text" id="m-pista-admin"></div>
           <div class="pista-edit-wrap" id="pista-edit-wrap">
-            <textarea id="pista-input" placeholder="Escribe la pista que le dejaras a Lu ese dia...&#10;&#10;Ej: 'Busca donde guardamos los secretos del dia a dia... el lugar que visitas dos veces al despertar'"></textarea>
+            <textarea id="pista-input" placeholder="Escribe la pista..."></textarea>
           </div>
         </div>
         <div class="tip-box" id="m-tip-admin"></div>
+        <!-- PAPELITO ADMIN -->
+        <div id="papelito-admin-inject"></div>
       </div>
       <div class="edit-section" id="edit-section">
-        <div class="edit-label">Titulo del dia</div>
-        <input type="text" id="edit-titulo">
-        <div class="edit-label">Descripcion (solo para ti)</div>
-        <textarea id="edit-desc"></textarea>
-        <div class="edit-label">Tip / nota privada</div>
-        <textarea id="edit-tip" style="min-height:50px"></textarea>
+        <div class="edit-label">Título</div><input type="text" id="edit-titulo">
+        <div class="edit-label">Descripción</div><textarea id="edit-desc"></textarea>
+        <div class="edit-label">Tip</div><textarea id="edit-tip" style="min-height:50px"></textarea>
       </div>
       <div class="modal-actions">
-        <button class="act-btn" id="admin-done-btn" onclick="toggleDone()"></button>
-        <button class="act-btn" onclick="togglePistaEdit()">📍 Editar pista</button>
-        <button class="act-btn" onclick="toggleEdit()">✏️ Editar dia</button>
-        <button class="act-btn primary" onclick="guardarTodo()">Guardar</button>
+        <button class="act-btn" id="admin-done-btn"></button>
+        <button class="act-btn" id="btn-pista-edit">📍 Editar pista</button>
+        <button class="act-btn" id="btn-day-edit">✏️ Editar día</button>
+        <button class="act-btn primary" id="btn-guardar">Guardar</button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="admin-fab-wrap" id="admin-fab-wrap">
-  <button class="admin-fab" id="admin-fab" onclick="toggleAdmin()">⚙️</button>
+<!-- CONFETTI -->
+<canvas id="confetti-canvas"></canvas>
+
+<!-- FOUND OVERLAY -->
+<div class="found-overlay" id="found-overlay">
+  <div class="found-card">
+    <div class="found-emoji" id="found-emoji">🎉</div>
+    <div class="found-title" id="found-title">¡Lo encontraste!</div>
+    <div class="found-msg" id="found-msg"></div>
+    <button class="found-close" id="found-close-btn">Seguir ✨</button>
+  </div>
 </div>
 
+<!-- RAZONES -->
+<div class="razones-overlay" id="razones-overlay">
+  <div class="razones-card">
+    <div class="razones-header">
+      <div class="razones-num">10</div>
+      <div class="razones-title">razones por las que<br>me alegra que existas</div>
+      <div class="razones-sub">— Escrito con el corazón, para ti —</div>
+    </div>
+    <div class="razones-body">
+      <div class="razon-item" style="animation-delay:.05s"><div class="razon-num">1</div><div><div class="razon-ttl">Tus ojos</div><div class="razon-desc">Hay un universo entero en ellos. Me pierdo cada vez que te miro.</div></div></div>
+      <div class="razon-item" style="animation-delay:.1s"><div class="razon-num">2</div><div><div class="razon-ttl">Tu energía</div><div class="razon-desc">Entras a un lugar y lo cambias. Nunca pasa desapercibida.</div></div></div>
+      <div class="razon-item" style="animation-delay:.15s"><div class="razon-num">3</div><div><div class="razon-ttl">Tu esencia</div><div class="razon-desc">Hay algo en ti que no se puede describir, solo se siente. Y me encanta sentirlo.</div></div></div>
+      <div class="razon-item" style="animation-delay:.2s"><div class="razon-num">4</div><div><div class="razon-ttl">Todo lo que aportas a mi vida</div><div class="razon-desc">Desde que estás, todo tiene más color, más sentido, más sabor.</div></div></div>
+      <div class="razon-item" style="animation-delay:.25s"><div class="razon-num">5</div><div><div class="razon-ttl">Eres la mejor doctora que conozco</div><div class="razon-desc">Tu vocación me enamora. Cuidas a todos con una entrega que me llena de orgullo.</div></div></div>
+      <div class="razon-item" style="animation-delay:.3s"><div class="razon-num">6</div><div><div class="razon-ttl">Tu sencillez</div><div class="razon-desc">No necesitas nada para brillar. Eres extraordinaria siendo tú.</div></div></div>
+      <div class="razon-item" style="animation-delay:.35s"><div class="razon-num">7</div><div><div class="razon-ttl">Tu voz súper hermosa</div><div class="razon-desc">Podría escucharte hablar para siempre. Cada palabra tuya me llega diferente.</div></div></div>
+      <div class="razon-item" style="animation-delay:.4s"><div class="razon-num">8</div><div><div class="razon-ttl">Tu cuerpo súper sexi</div><div class="razon-desc">Me robas el aliento. Siempre. Sin esfuerzo. Solo siendo tú.</div></div></div>
+      <div class="razon-item" style="animation-delay:.45s"><div class="razon-num">9</div><div><div class="razon-ttl">Tu cabello hermoso</div><div class="razon-desc">Es parte de tu magia. Me encanta verlo, me encanta cuando lo sueltas.</div></div></div>
+      <div class="razon-item" style="animation-delay:.5s"><div class="razon-num">10</div><div><div class="razon-ttl">Tu mente e inteligencia me enamoran</div><div class="razon-desc">Hablar contigo es mi parte favorita del día. Me inspiras, me retas, me enamoras.</div></div></div>
+    </div>
+    <div class="razones-footer">
+      <button class="razones-close-btn" id="razones-close-btn">Guardar en mi corazón 💛</button>
+    </div>
+  </div>
+</div>
+
+<!-- SPOTIFY SECRET -->
+<button class="spotify-secret" id="spotify-btn">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+</button>
+
+<!-- ADMIN FAB -->
+<div class="admin-fab-wrap" id="admin-fab-wrap">
+  <button class="admin-fab" id="admin-fab">⚙️</button>
+</div>
+
+<div id="sync-badge"></div>
+
 <script>
-const TIPOS={
+// ── DATOS ──────────────────────────────────────────────────────────────
+const TIPOS = {
   carta:{label:'Carta / nota',color:'#D4537E',bg:'#FBEAF0',icon:'💌'},
   chocolate:{label:'Chocolate / dulce',color:'#BA7517',bg:'#FAEEDA',icon:'🍫'},
   flor:{label:'Flor / naturaleza',color:'#3B6D11',bg:'#EAF3DE',icon:'🌸'},
   actividad:{label:'Actividad / reto',color:'#534AB7',bg:'#EEEDFE',icon:'✨'},
   cuaderno:{label:'Cuaderno / escribe',color:'#185FA5',bg:'#E6F1FB',icon:'📓'},
   vela:{label:'Vela / ambiente',color:'#993C1D',bg:'#FAECE7',icon:'🕯️'},
-  intimo:{label:'Momento intimo',color:'#993556',bg:'#FBEAF0',icon:'🌙'},
-  plan:{label:'Plan del dia',color:'#1A7A4A',bg:'#E0F5EB',icon:'🌤️'},
-  especial:{label:'Dia especial',color:'#BA7517',bg:'#FAEEDA',icon:'🎂'},
+  intimo:{label:'Momento íntimo',color:'#993556',bg:'#FBEAF0',icon:'🌙'},
+  plan:{label:'Plan del día',color:'#1A7A4A',bg:'#E0F5EB',icon:'🌤️'},
+  especial:{label:'Día especial',color:'#BA7517',bg:'#FAEEDA',icon:'🎂'},
 };
-const BASE=[
-  {n:1,tipo:'carta',titulo:'Carta de apertura',desc:'Hoy empieza tu mes. Busca la carta que te deje — te explica todo lo que viene.',tip:'💡 Sobre sellado con su nombre. Esta carta abre el juego.'},
-  {n:2,tipo:'cuaderno',titulo:'Tu cuaderno de junio',desc:'Hoy hay algo esperandote. Algo para que guardes todo lo que va a pasar este mes. Busca el postit — el te dice donde encontrarlo.',tip:'💡 Pega un postit en algun lugar visible. La pista ya esta escrita abajo — copiala al postit.',pista:'Algo tuyo te espera en el lugar donde guardamos las cosas mas importantes. Buscalo antes de las 9pm 🔍'},
-  {n:3,tipo:'chocolate',titulo:'El primer chocolate',desc:'Primer chocolate del mes. Tiene un numero — hay mas esperandote en los dias que vienen.',tip:'💡 Escondelo con una pista que la lleve hasta el.'},
-  {n:4,tipo:'chocolate',titulo:'Algo dulce te espera 🍭',desc:'Hoy hay algo dulce esperandote. No es chocolate... pero esta igual de rico. Busca bien.',tip:'💡 Esconde la paleta en su lugar — su cuarto, su bolsa, su almohada.',pista:'Hoy no hay flor... hay algo igual de colorido pero mucho mas dulce. Esta en el lugar que mas es tuyo. Buscalo antes de las 9pm 🍭'},
-  {n:5,tipo:'actividad',titulo:'Playlist sorpresa',desc:'Hay una playlist armada para ti. Busca el papel con el nombre — es tuya para el fin de semana.',tip:'💡 Viernes — que la escuche en el finde. Ponle un nombre bonito.'},
-  {n:6,tipo:'intimo',titulo:'Noche especial 🌙',desc:'Esta noche es tuya. Toca hablar, escucharte y masaje... disfrútalo.',tip:'💡 Sabado de descanso — musica suave, vela, sin telefono. Solo estar.'},
-  {n:7,tipo:'plan',titulo:'Domingo al parque',desc:'Ponte algo comodo — hoy salimos. Un rato al parque, caminar sin prisa, sin telefono. El plan eres tu y yo afuera.',tip:'💡 Parque cercano + helado o algo rico de camino. Noche en casa tranquilos.'},
-  {n:8,tipo:'carta',titulo:'Nota en tu bolsillo',desc:'Algo pequeno llego a tu bolsa o mochila sin que te avisara. Buscalo.',tip:'💡 Hoy pense en ti y quise que lo supieras.'},
-  {n:9,tipo:'actividad',titulo:'Reto: escribeme algo',desc:'Hay un papel con una instruccion para ti. Sin presion — lo haces cuando quieras hoy.',tip:'💡 Martes ligero. Pidele 5 cosas que quiere hacer antes de cumplir 29.'},
-  {n:10,tipo:'chocolate',titulo:'Chocolate #2',desc:'Segundo chocolate, con una nota sobre algo que me encanta de ti. Algo concreto.',tip:'💡 Me encanta como te ries cuando algo te da pena ajena.'},
-  {n:11,tipo:'plan',titulo:'Comidita juntos 🍽️',desc:'Disfruta de la comidita.',tip:'💡 Cena o tarde juntos — sin telefono, solo ustedes.'},
+
+const BASE = [
+  {n:1,tipo:'carta',titulo:'Carta de apertura',desc:'Hoy empieza tu mes. Busca la carta que te dejé — te explica todo lo que viene.',tip:'💡 Sobre sellado con su nombre.'},
+  {n:2,tipo:'cuaderno',titulo:'Tu cuaderno de junio',desc:'Hoy hay algo esperándote. Algo para que guardes todo lo que va a pasar este mes. Busca el postit — él te dice dónde encontrarlo.',tip:'💡 Pega un postit visible con la pista.',pista:'Algo tuyo te espera en el lugar donde guardamos las cosas más importantes. Búscalo 🔍'},
+  {n:3,tipo:'chocolate',titulo:'Algo dulce te espera 🍭',desc:'Hoy hay algo dulce esperándote. No es chocolate... pero está igual de rico. Busca bien.',tip:'💡 Esconde la paleta con una pista.',pista:'Hoy no hay flor... hay algo igual de colorido pero mucho más dulce. Está en el lugar que más es tuyo 🍭'},
+  {n:4,tipo:'chocolate',titulo:'El primer chocolate',desc:'Primer chocolate del mes. Tiene un número — hay más esperándote.',tip:'💡 Escóndelo con una pista.'},
+  {n:5,tipo:'actividad',titulo:'Playlist sorpresa',desc:'Hay una playlist armada para ti. Busca el papel con el nombre.',tip:'💡 Viernes — que la escuche en el finde.'},
+  {n:6,tipo:'intimo',titulo:'Noche especial 🌙',desc:'Esta noche es tuya. Toca hablar, escucharte y masaje... disfrútalo.',tip:'💡 Sábado de descanso.'},
+  {n:7,tipo:'plan',titulo:'Domingo al parque',desc:'Ponte algo cómodo — hoy salimos. Un rato al parque, caminar sin prisa, sin teléfono.',tip:'💡 Parque + algo rico de camino.'},
+  {n:8,tipo:'carta',titulo:'Nota en tu bolsillo',desc:'Algo pequeño llegó a tu bolsa o mochila sin que te avisara. Búscalo.',tip:'💡 "Hoy pensé en ti y quise que lo supieras."'},
+  {n:9,tipo:'actividad',titulo:'Reto: escríbeme algo',desc:'Hay un papel con una instrucción para ti. Sin presión.',tip:'💡 5 cosas que quiere hacer antes de cumplir 29.'},
+  {n:10,tipo:'chocolate',titulo:'Chocolate #2',desc:'Segundo chocolate, con una nota sobre algo que me encanta de ti.',tip:'💡 Concreto y honesto.'},
+  {n:11,tipo:'plan',titulo:'Comidita juntos 🍽️',desc:'Disfruta de la comidita.',tip:'💡 Cena o tarde juntos — sin teléfono.'},
   {n:12,tipo:'carta',titulo:'Carta: 10 razones 💌',desc:'Una carta solo para ti. 10 razones por las que me alegra infinito que existas.',tip:'💡 Toca el botón de la lista para revelarlas.',tieneRazones:true},
   {n:13,tipo:'cuaderno',titulo:'Una cosa que nunca te he dicho 🤫',desc:'Escribe algo que nunca me has dicho. Puede ser pequeño o enorme. No se juzga, no se debate. Solo se lee con el corazón.',tip:'💡 Tu papelito primero. El de Oscar aparece cuando los dos hayan escrito.'},
   {n:14,tipo:'cuaderno',titulo:'¿Qué te da miedo de nosotros? 🌑',desc:'Una pregunta incómoda pero necesaria. ¿Qué es lo que más te asusta de esta relación? Escríbelo sin filtro.',tip:'💡 Las cosas que dan miedo nombrarlas son las más importantes de decir.'},
-  {n:15,tipo:'cuaderno',titulo:'Algo que me duele y no he soltado 💔',desc:'Hay cosas que duelen y se quedan guardadas. Hoy es el día de sacarla. Escribe eso que cargás sin decirlo.',tip:'💡 No tiene que ser reciente. Puede ser algo viejo que todavía pesa.'},
-  {n:16,tipo:'cuaderno',titulo:'¿Qué es lo que más admiras de mí? ✨',desc:'Una pregunta bonita en medio de las difíciles. ¿Qué ves en el otro que a veces olvidas decir en voz alta?',tip:'💡 Sé específico. No genérico. Una sola cosa real vale más que diez bonitas.'},
+  {n:15,tipo:'cuaderno',titulo:'Algo que me duele y no he soltado 💔',desc:'Hay cosas que duelen y se quedan guardadas. Hoy es el día de sacarla. Escribe eso que cargas sin decirlo.',tip:'💡 No tiene que ser reciente. Puede ser algo viejo que todavía pesa.'},
+  {n:16,tipo:'cuaderno',titulo:'¿Qué es lo que más admiras de mí? ✨',desc:'Una pregunta bonita en medio de las difíciles. ¿Qué ves en el otro que a veces olvidas decir en voz alta?',tip:'💡 Sé específico. Una sola cosa real vale más que diez bonitas.'},
   {n:17,tipo:'cuaderno',titulo:'Una verdad que duele decir 🗡️',desc:'No una queja. Una verdad. Algo que sabes que es cierto y que cuesta decirlo porque incomoda o duele.',tip:'💡 Escríbela con amor. La intención no es herir — es ser honesto.'},
   {n:18,tipo:'cuaderno',titulo:'¿En qué momento te sentiste más amado/a? 🕯️',desc:'Un recuerdo específico. Un momento donde sentiste que el otro te amaba de verdad. Descríbelo.',tip:'💡 Los detalles pequeños son los que más importan aquí.'},
-  {n:19,tipo:'cuaderno',titulo:'Algo que necesito que cambies 🔄',desc:'No es un ataque. Es una petición honesta. ¿Qué necesitas que el otro trabaje o cambie para que estén mejor?',tip:'💡 Dilo con respeto. Empieza con 'Necesito que...''},
-  {n:20,tipo:'cuaderno',titulo:'¿Cuándo sientes que me pierdes? 🌊',desc:'¿En qué momentos sientes que hay distancia? ¿Cuándo sientes que no estás del todo presente o que el otro no lo está?',tip:'💡 No hay respuesta correcta. Solo hay honestidad.'},
-  {n:21,tipo:'cuaderno',titulo:'Una promesa que te hago hoy 🤝',desc:'No de boda, no de para siempre. Una promesa real, concreta, de hoy. Algo que puedas cumplir.',tip:'💡 Una sola. Que sea verdad.'},
-  {n:22,tipo:'cuaderno',titulo:'¿Qué te enamora de mí cada día? 💫',desc:'No lo que te gustó al principio. Lo que te sigue enamorando ahora, en lo cotidiano, en lo rutinario.',tip:'💡 Puede ser algo muy pequeño. Eso lo hace más real.'},
-  {n:23,tipo:'cuaderno',titulo:'Una pregunta que siempre quisiste hacerme ❓',desc:'La pregunta que guardaste. La que no hiciste por miedo, por pena o porque no era el momento. Hoy es el momento.',tip:'💡 El otro tiene que contestarla también en su papelito.'},
-  {n:24,tipo:'cuaderno',titulo:'¿Cómo te imaginas que seremos en 5 años? 🔭',desc:'No lo ideal. Lo que realmente imaginas. ¿Dónde estamos? ¿Cómo estamos? ¿Qué construimos juntos?',tip:'💡 Sin presión de que sea perfecto. Solo honestidad.'},
-  {n:25,tipo:'cuaderno',titulo:'Algo que hago que te hace sentir seguro/a 🏠',desc:'Un momento, un gesto, una costumbre tuya o mía que hace que el otro sienta que está en casa.',tip:'💡 Esto es importante saberlo. Díselo.'},
-  {n:26,tipo:'cuaderno',titulo:'¿Qué necesitas de mí que no te he dado? 🫳',desc:'Una de las preguntas más difíciles. ¿Qué falta? ¿Qué necesitas que todavía no has pedido o que pediste y no llegó?',tip:'💡 Escríbelo con amor. El otro lo leerá con el mismo amor.'},
-  {n:27,tipo:'cuaderno',titulo:'Lo que más me gusta de nosotros 🌸',desc:'No lo que más te gusta del otro. Lo que más te gusta de los dos juntos. De lo que son cuando están juntos.',tip:'💡 Eso que solo existe cuando están los dos.'},
-  {n:28,tipo:'cuaderno',titulo:'Una cosa que quiero que nunca cambie 🔒',desc:'De ti, de mí, de nosotros. Algo que cuando lo imaginas sin eso duele un poco.',tip:'💡 Díselo para que sepa que lo valoras.'},
+  {n:19,tipo:'cuaderno',titulo:'Algo que necesito que cambies 🔄',desc:'No es un ataque. Es una petición honesta. ¿Qué necesitas que el otro trabaje o cambie para que estén mejor?',tip:'💡 Empieza con "Necesito que..."'},
+  {n:20,tipo:'intimo',titulo:'Sábado íntimo',desc:'Esta noche es para los dos. Música, velas, tiempo sin prisa.',tip:'💡 Sábado libre — el mejor día para este tipo de detalle.'},
+  {n:21,tipo:'cuaderno',titulo:'¿Cuándo sientes que me pierdes? 🌊',desc:'¿En qué momentos sientes que hay distancia? ¿Cuándo sientes que no estás del todo presente?',tip:'💡 No hay respuesta correcta. Solo hay honestidad.'},
+  {n:22,tipo:'cuaderno',titulo:'Una promesa que te hago hoy 🤝',desc:'No de boda, no de para siempre. Una promesa real, concreta, de hoy. Algo que puedas cumplir.',tip:'💡 Una sola. Que sea verdad.'},
+  {n:23,tipo:'cuaderno',titulo:'¿Qué te enamora de mí cada día? 💫',desc:'No lo que te gustó al principio. Lo que te sigue enamorando ahora, en lo cotidiano.',tip:'💡 Puede ser algo muy pequeño. Eso lo hace más real.'},
+  {n:24,tipo:'cuaderno',titulo:'Una pregunta que siempre quisiste hacerme ❓',desc:'La pregunta que guardaste. La que no hiciste por miedo o pena. Hoy es el momento.',tip:'💡 El otro tiene que contestarla también en su papelito.'},
+  {n:25,tipo:'cuaderno',titulo:'¿Cómo nos imaginas en 5 años? 🔭',desc:'No lo ideal. Lo que realmente imaginas. ¿Dónde estamos? ¿Cómo estamos?',tip:'💡 Sin presión de que sea perfecto. Solo honestidad.'},
+  {n:26,tipo:'cuaderno',titulo:'Algo que hago que te hace sentir seguro/a 🏠',desc:'Un momento, un gesto, una costumbre que hace que el otro sienta que está en casa.',tip:'💡 Esto es importante saberlo. Díselo.'},
+  {n:27,tipo:'intimo',titulo:'Víspera del cumpleaños',desc:'Falta poco. Esta noche es especial — solo tú y yo. Un papel sobre lo que veo en ti. Lo que quizás tú no ves.',tip:'💡 Noche tranquila en casa.'},
+  {n:28,tipo:'cuaderno',titulo:'¿Qué necesitas de mí que no te he dado? 🫳',desc:'Una de las preguntas más difíciles. ¿Qué falta? ¿Qué necesitas que todavía no has pedido?',tip:'💡 Escríbelo con amor. El otro lo leerá con el mismo amor.'},
   {n:29,tipo:'cuaderno',titulo:'Carta de víspera 💌',desc:'Mañana es tu cumpleaños y nuestro aniversario. Escríbeme algo. Lo que sea. Lo que sientas esta noche antes del gran día.',tip:'💡 No tiene que ser largo. Solo tiene que ser tuyo.'},
-  {n:30,tipo:'especial',titulo:'Feliz cumpleanos, Lu!',desc:'Hoy es tu dia. Y tambien es nuestro dia — un ano juntos. Todo el mes fue para llegar aqui.',tip:'💡 Carta de cumpleanos + carta de aniversario + ultimo chocolate con lazo.'},
+  {n:30,tipo:'especial',titulo:'¡Feliz cumpleaños, Lu! 🎂',desc:'Hoy es tu día. Y también es nuestro día — un año juntos. Todo el mes fue para llegar aquí.',tip:'💡 Carta de cumpleaños + carta de aniversario.'},
 ];
-const KEY='junio_lu_2026_v5';
-// Borrar TODAS las versiones viejas de localStorage al cargar
-(function(){
-  const keys = Object.keys(localStorage);
-  keys.forEach(k => {
-    if(k.startsWith('junio_lu_') && k !== 'junio_lu_2026_v5' && k !== 'junio_lu_admin_v3' && k !== 'spotify_unlocked') {
-      localStorage.removeItem(k);
-      console.log('Borrado localStorage viejo:', k);
+
+const KEY = 'junio_lu_v6';
+const ADMIN_KEY = 'junio_lu_admin_v6';
+const DIAS_SEM = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+
+// Clear old keys
+['junio_lu_2026_v3','junio_lu_2026_v4','junio_lu_2026_v5'].forEach(k => localStorage.removeItem(k));
+
+function cargarDatos() {
+  try {
+    const r = localStorage.getItem(KEY);
+    if (r) {
+      const saved = JSON.parse(r);
+      return BASE.map(b => ({...b, ...(saved.find(s => s.n === b.n) || {}), n: b.n}));
     }
-  });
-})();
-const ADMIN_KEY='junio_lu_admin_v3';
-const DIAS_SEM=['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
-
-function cargarDatos(){
-  try{const r=localStorage.getItem(KEY);if(r){const s=JSON.parse(r);return BASE.map(b=>({...b,...(s.find(x=>x.n===b.n)||{}),n:b.n}));}}catch(e){}
-  return BASE.map(b=>({...b}));
+  } catch(e) {}
+  return BASE.map(b => ({...b}));
 }
-function guardarDatos(){try{localStorage.setItem(KEY,JSON.stringify(state.dias));}catch(e){}}
-function diaHoy(){
-  const mx=new Date(new Date().toLocaleString('en-US',{timeZone:'America/Mexico_City'}));
-  if(mx.getFullYear()===2026&&mx.getMonth()===5)return mx.getDate();
-  if(mx.getFullYear()===2026&&mx.getMonth()>5)return 99;
-  return 0;
-}
-function horaHoy(){
-  const mx=new Date(new Date().toLocaleString('en-US',{timeZone:'America/Mexico_City'}));
-  return mx.getHours() + mx.getMinutes()/60;
-}
-function estaDesbloqueado(n){
-  // Todos desbloqueados — junio ya casi termina
-  return true;
+function guardarDatos() {
+  try { localStorage.setItem(KEY, JSON.stringify(state.dias)); } catch(e) {}
 }
 
-const state={dias:cargarDatos(),current:null,filtro:null,isAdmin:localStorage.getItem(ADMIN_KEY)==='true'};
+const state = {
+  dias: cargarDatos(),
+  current: null,
+  isAdmin: localStorage.getItem(ADMIN_KEY) === 'true',
+};
 
-
-// ─── NAVEGACIÓN PANTALLAS ───
-function irA2() {
-  const s1 = document.getElementById('screen1');
-  const s2 = document.getElementById('screen2');
-  if(s1) s1.style.display = 'none';
-  if(s2) { s2.style.display = 'flex'; s2.style.flexDirection = 'column'; s2.style.alignItems = 'center'; s2.style.justifyContent = 'center'; }
-  window.scrollTo(0,0);
-}
-
-function irA3() {
-  // Apagar las luces
-  document.body.classList.add('lights-off');
-  setTimeout(() => {
-    document.getElementById('portada').style.display = 'none';
-    document.getElementById('app').classList.add('visible');
-    document.getElementById('admin-fab-wrap').classList.add('visible');
-    document.body.classList.add('dark-mode');
-    document.body.classList.remove('lights-off');
-    renderCalendario();
-    actualizarBadge();
-    loadRemoteData();
-    mostrarSpotifyBtn();
-  }, 900);
-}
-
-function verPortada(){closeModal();document.getElementById('portada').style.display='flex';document.getElementById('app').classList.remove('visible');}
-function toggleAdmin(){
-  if(state.isAdmin){state.isAdmin=false;localStorage.setItem(ADMIN_KEY,'false');}
-  else{const p=prompt('Contrasena:');if(p==='oscar2026'){state.isAdmin=true;localStorage.setItem(ADMIN_KEY,'true');}else if(p!==null){alert('Incorrecta');return;}else return;}
-  renderCalendario();actualizarBadge();
-}
-function actualizarBadge(){
-  const b=document.getElementById('mode-badge'),f=document.getElementById('admin-fab');
-  if(state.isAdmin){b.textContent='Admin ⚙️';b.className='mode-badge admin';f.textContent='🔓';}
-  else{b.textContent='Lu 🌸';b.className='mode-badge lu';f.textContent='⚙️';}
-}
-function renderLeyenda(){
-  const w=document.getElementById('legend-wrap');w.innerHTML='';
-  Object.entries(TIPOS).forEach(([k,t])=>{
-    const c=document.createElement('button');
-    c.className='leg-chip'+(state.filtro===k?' active':'');
-    c.innerHTML=`<span class="leg-dot" style="background:${t.color}"></span>${t.icon} ${t.label}`;
-    c.onclick=()=>{state.filtro=state.filtro===k?null:k;renderCalendario();renderLeyenda();};
-    w.appendChild(c);
-  });
-}
-function renderCalendario(){
-  const g=document.getElementById('cal-grid');if(!g)return;g.innerHTML='';
-  const done=state.dias.filter(d=>d.done).length;
-  if(document.getElementById('stat-done'))document.getElementById('stat-done').textContent=done;
-  if(document.getElementById('progress-fill'))document.getElementById('progress-fill').style.width=(done/30*100).toFixed(1)+'%';
-  if(document.getElementById('prog-label'))document.getElementById('prog-label').textContent=done+' de 30';
-  const hoy=diaHoy();
-  for(let i=0;i<new Date(2026,5,1).getDay();i++){const e=document.createElement('div');e.className='day-cell empty';g.appendChild(e);}
-  state.dias.forEach(d=>{
-    const t=TIPOS[d.tipo],desbloqueado=estaDesbloqueado(d.n),esHoy=d.n===hoy;
-    // Filtro: si hay filtro activo, días que no coinciden se ocultan
-    // Días bloqueados que coinciden con filtro: se muestran como bloqueados (no revelan contenido)
-    const filtroActivo=state.filtro!==null;
-    const coincideFiltro=!filtroActivo||state.filtro===d.tipo;
-    const dimmed=filtroActivo&&!coincideFiltro;
-    const cell=document.createElement('div');
-    let cls='day-cell '+(desbloqueado?'unlocked':'locked');
-    if(d.n===30&&desbloqueado)cls+=' cumple';
-    if(d.done)cls+=' done';if(esHoy&&!d.done)cls+=' hoy';if(dimmed)cls+=' dimmed';
-    cell.className=cls;
-    if(desbloqueado&&coincideFiltro){cell.style.borderColor=t.color+'55';cell.style.background=d.done?t.bg:'white';}
-    let inner=`<span class="day-num-cell">${d.n}</span>`;
-    // Días bloqueados siempre muestran candado, nunca el emoji/título del tipo
-    if(!desbloqueado)inner+=`<span class="lock-icon">🔒</span>`;
-    else{inner+=`<span class="day-icon-cell">${t.icon}</span><span class="day-label-cell">${d.titulo}</span>`;}
-    if(d.done)inner+=`<div class="done-check">✓</div>`;
-    cell.innerHTML=inner;cell.onclick=()=>abrirModal(d.n);g.appendChild(cell);
-  });
-}
-function abrirModal(n){
-  const d=state.dias.find(x=>x.n===n);state.current=n;
-  const t=TIPOS[d.tipo],fecha=new Date(2026,5,n),desbloqueado=estaDesbloqueado(n);
-  document.getElementById('m-fecha').textContent=DIAS_SEM[fecha.getDay()]+' '+n+' de junio, 2026';
-  const badge=document.getElementById('m-badge');badge.textContent=t.icon+' '+t.label;badge.style.background=t.bg;badge.style.color=t.color;
-  document.getElementById('m-titulo').textContent=desbloqueado?d.titulo:'??? ????? ???';
-  ['view-locked','view-lu','view-admin'].forEach(id=>document.getElementById(id).style.display='none');
-  if(!desbloqueado&&!state.isAdmin){
-    document.getElementById('view-locked').style.display='block';
-  }else if(state.isAdmin){
-    document.getElementById('view-admin').style.display='block';
-    document.getElementById('m-desc-admin').textContent=d.desc;
-    document.getElementById('m-tip-admin').textContent=d.tip;
-    const pa=document.getElementById('m-pista-admin');
-    if(d.pista){pa.textContent=d.pista;pa.style.fontStyle='italic';pa.style.color='var(--tinta)';}
-    else{pa.textContent='Sin pista todavia — toca Editar pista.';pa.style.fontStyle='normal';pa.style.color='var(--gris)';}
-    document.getElementById('pista-input').value=d.pista||'';
-    document.getElementById('pista-edit-wrap').classList.remove('open');
-    document.getElementById('edit-titulo').value=d.titulo;
-    document.getElementById('edit-desc').value=d.desc;
-    document.getElementById('edit-tip').value=d.tip;
-    document.getElementById('edit-section').classList.remove('open');
-    const adb=document.getElementById('admin-done-btn');
-    adb.textContent=d.done?'✓ Encontrado':'○ Marcar encontrado';
-    adb.className='act-btn'+(d.done?' success':'');
-  }else{
-    document.getElementById('view-lu').style.display='block';
-    document.getElementById('m-desc-lu').textContent=d.desc;
-    const pb=document.getElementById('pista-box');
-    if(d.pista){pb.style.display='block';document.getElementById('m-pista').textContent=d.pista;}else{pb.style.display='none';}
-    const lb=document.getElementById('lu-done-btn');
-    lb.textContent=d.done?'✓ Ya lo encontre!':'○ Marcar como encontrado';
-    lb.className='act-btn'+(d.done?' success':'');
-    // Botón especial día 12
-    const existingBtn = document.getElementById('razones-trigger-btn');
-    if(existingBtn) existingBtn.remove();
-    if(d.tieneRazones){
-      const rBtn = document.createElement('button');
-      rBtn.id = 'razones-trigger-btn';
-      rBtn.className = 'ver-lista-btn';
-      rBtn.innerHTML = '✨ Ver las 10 razones';
-      rBtn.onclick = abrirRazones;
-      document.getElementById('lu-actions').appendChild(rBtn);
-    }
-    // Papelitos interactivos desde día 13
-    const existPapelito = document.getElementById('papelito-inject-'+n);
-    if(existPapelito) existPapelito.remove();
-    if(n >= 13){
-      const pDiv = document.createElement('div');
-      pDiv.id = 'papelito-inject-'+n;
-      pDiv.innerHTML = mostrarPapelitos(n);
-      document.getElementById('view-lu').appendChild(pDiv);
-      setTimeout(()=>renderTodosPapelitos(n), 50);
-    }
-  }
-  document.getElementById('modal-overlay').classList.add('open');
-}
-function closeModal(){document.getElementById('modal-overlay').classList.remove('open');state.current=null;}
-function toggleDone(){const d=state.dias.find(x=>x.n===state.current);d.done=!d.done;guardarDatos();renderCalendario();abrirModal(state.current);}
-function togglePistaEdit(){document.getElementById('pista-edit-wrap').classList.toggle('open');}
-function toggleEdit(){document.getElementById('edit-section').classList.toggle('open');}
-// ─── SYNC via Upstash Redis ───
-
+// ── SYNC ────────────────────────────────────────────────────────────────
 async function loadRemoteData() {
   try {
     const res = await fetch('/api/sync?t=' + Date.now());
     if (!res.ok) return;
     const json = await res.json();
     if (!json.ok || !json.data || !json.data.length) return;
-    const remote = json.data;
-    // Remote SIEMPRE gana — sobreescribe local completamente
     state.dias = BASE.map(b => {
-      const r = remote.find(x => x.n === b.n);
-      return r ? { ...b, ...r, n: b.n } : { ...b };
+      const r = json.data.find(x => x.n === b.n);
+      return r ? {...b, ...r, n: b.n} : {...b};
     });
     guardarDatos();
     renderCalendario();
-    console.log('✅ Estado cargado desde Upstash:', remote.length, 'cambios');
-  } catch(e) {
-    console.log('⚠️ Sin conexión, usando localStorage:', e.message);
-  }
-}
-
-async function syncToGitHub() {
-  showSyncBadge('Guardando...');
-  try {
-    const toSave = state.dias.map(d => {
-      const b = BASE.find(x => x.n === d.n);
-      const diff = { n: d.n };
-      if (d.pista)               diff.pista  = d.pista;
-      if (d.done)                diff.done   = d.done;
-      if (d.titulo !== b.titulo) diff.titulo = d.titulo;
-      if (d.desc   !== b.desc)   diff.desc   = d.desc;
-      if (d.tip    !== b.tip)    diff.tip    = d.tip;
-      return diff;
-    }).filter(d => Object.keys(d).length > 1);
-
-    const res = await fetch('/api/sync', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: toSave })
-    });
-    const json = await res.json();
-    if (json.ok) {
-      showSyncBadge('✅ Guardado en todos los dispositivos');
-    } else {
-      showSyncBadge('❌ Error: ' + (json.error || 'intenta de nuevo'));
-    }
-  } catch(e) {
-    showSyncBadge('❌ Sin conexión');
-  }
+  } catch(e) {}
 }
 
 function showSyncBadge(msg) {
-  let badge = document.getElementById('sync-badge');
-  if (!badge) {
-    badge = document.createElement('div');
-    badge.id = 'sync-badge';
-    badge.style.cssText = 'position:fixed;bottom:5rem;right:1.5rem;background:var(--tinta);color:white;font-size:12px;padding:8px 16px;border-radius:99px;z-index:300;font-family:var(--font-sans,sans-serif);box-shadow:0 4px 16px rgba(0,0,0,.2);transition:opacity .4s;';
-    document.body.appendChild(badge);
-  }
+  const badge = document.getElementById('sync-badge');
   badge.textContent = msg;
+  badge.style.display = 'block';
   badge.style.opacity = '1';
-  if (msg.startsWith('✅')) {
-    setTimeout(() => { badge.style.opacity = '0'; }, 3000);
+  if (msg.startsWith('✅')) setTimeout(() => { badge.style.opacity = '0'; setTimeout(() => badge.style.display='none', 400); }, 2500);
+}
+
+async function syncToCloud() {
+  try {
+    showSyncBadge('Guardando...');
+    const toSave = state.dias.map(d => {
+      const b = BASE.find(x => x.n === d.n);
+      const diff = {n: d.n};
+      if (d.pista) diff.pista = d.pista;
+      if (d.done) diff.done = d.done;
+      if (d.titulo !== b.titulo) diff.titulo = d.titulo;
+      if (d.desc !== b.desc) diff.desc = d.desc;
+      if (d.tip !== b.tip) diff.tip = d.tip;
+      // Save papelitos
+      if (d.papelito_lu) diff.papelito_lu = d.papelito_lu;
+      if (d.papelito_oscar) diff.papelito_oscar = d.papelito_oscar;
+      return diff;
+    }).filter(d => Object.keys(d).length > 1);
+    const res = await fetch('/api/sync', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({data: toSave})});
+    const json = await res.json();
+    if (json.ok) showSyncBadge('✅ Guardado en todos los dispositivos');
+    else showSyncBadge('❌ Error al guardar');
+  } catch(e) { showSyncBadge('❌ Sin conexión'); }
+}
+
+// ── CALENDARIO ──────────────────────────────────────────────────────────
+function renderCalendario() {
+  const g = document.getElementById('cal-grid');
+  if (!g) return;
+  g.innerHTML = '';
+  const done = state.dias.filter(d => d.done).length;
+  const sd = document.getElementById('stat-done');
+  const pf = document.getElementById('progress-fill');
+  const pl = document.getElementById('prog-label');
+  if (sd) sd.textContent = done;
+  if (pf) pf.style.width = (done/30*100).toFixed(1) + '%';
+  if (pl) pl.textContent = done + ' de 30';
+
+  const hoy = new Date(new Date().toLocaleString('en-US',{timeZone:'America/Mexico_City'}));
+  const dHoy = (hoy.getFullYear()===2026 && hoy.getMonth()===5) ? hoy.getDate() : 99;
+
+  const primerDia = new Date(2026, 5, 1).getDay();
+  for (let i = 0; i < primerDia; i++) {
+    const e = document.createElement('div'); e.className = 'day-cell empty'; g.appendChild(e);
   }
+
+  state.dias.forEach(d => {
+    const t = TIPOS[d.tipo];
+    const cell = document.createElement('div');
+    let cls = 'day-cell';
+    if (d.n === 30) cls += ' cumple';
+    if (d.done) cls += ' done';
+    if (d.n === dHoy && !d.done) cls += ' hoy';
+    cell.className = cls;
+    cell.style.borderColor = t.color + '55';
+    cell.style.background = d.done ? t.bg : '';
+    let inner = `<span class="day-num-cell">${d.n}</span><span class="day-icon-cell">${t.icon}</span><span class="day-label-cell">${d.titulo}</span>`;
+    if (d.done) inner += `<div class="done-check">✓</div>`;
+    cell.innerHTML = inner;
+    cell.addEventListener('click', () => abrirModal(d.n));
+    g.appendChild(cell);
+  });
 }
 
-function guardarTodo(){
-  const d=state.dias.find(x=>x.n===state.current);
-  const t=document.getElementById('edit-titulo').value.trim();
-  const dc=document.getElementById('edit-desc').value.trim();
-  const tp=document.getElementById('edit-tip').value.trim();
-  const p=document.getElementById('pista-input').value.trim();
-  if(t)d.titulo=t;if(dc)d.desc=dc;if(tp)d.tip=tp;d.pista=p;
-  guardarDatos();renderCalendario();abrirModal(state.current);
-  document.getElementById('edit-section').classList.remove('open');
-  document.getElementById('pista-edit-wrap').classList.remove('open');
-  syncToGitHub();
-}
-document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
+// ── MODAL ───────────────────────────────────────────────────────────────
+function abrirModal(n) {
+  const d = state.dias.find(x => x.n === n);
+  state.current = n;
+  const t = TIPOS[d.tipo];
+  const fecha = new Date(2026, 5, n);
+  document.getElementById('m-fecha').textContent = DIAS_SEM[fecha.getDay()] + ' ' + n + ' de junio, 2026';
+  const badge = document.getElementById('m-badge');
+  badge.textContent = t.icon + ' ' + t.label;
+  badge.style.background = t.bg; badge.style.color = t.color;
+  document.getElementById('m-titulo').textContent = d.titulo;
 
+  document.getElementById('view-lu').style.display = 'none';
+  document.getElementById('view-admin').style.display = 'none';
 
-// ─── PENSAMIENTOS DE OSCAR ───
-const PENSAMIENTOS = [
-  "En este momento estoy pensando en cómo te ves cuando te ríes sin querer.",
-  "Estoy pensando que ojalá puedas sentir lo mucho que te quiero a través de la pantalla.",
-  "Estoy pensando en la primera vez que me di cuenta que me gustabas.",
-  "Pienso que eres la persona más bonita que conozco, por dentro y por fuera.",
-  "Estoy pensando en que me alegra cada día que estás en mi vida.",
-  "En este momento pienso: qué suerte la mía.",
-  "Estoy pensando en cómo hueles cuando te abrazo.",
-  "Pienso que no sé cómo era mi vida antes de ti, y tampoco quiero saberlo.",
-  "Estoy pensando que te mereces todo lo bueno del mundo, y más.",
-  "Pienso en tu cara cuando algo te da mucho gusto — es mi favorita.",
-  "Estoy pensando en que ojalá este mes te haga sentir lo especial que eres.",
-  "Pienso que me enamoro otra vez cada vez que me cuentas algo con emoción.",
-  "Estoy pensando en ti. Así de simple.",
-  "Pienso que el mejor momento de mi día es cuando estás cerca.",
-  "Estoy pensando en lo orgulloso que me pones con todo lo que haces.",
-  "Pienso que te quiero hoy más que ayer, y menos que mañana.",
-  "Estoy pensando en darte un abrazo muy largo cuando te vea.",
-  "Pienso que junio es poco para decirte todo lo que siento.",
-  "Estoy pensando que elegirte fue la mejor decisión que he tomado.",
-  "Pienso en ti. Siempre. Todo el tiempo. Ahorita también.",
-];
-
-let lastPensamiento = -1;
-function pensarOscar() {
-  let idx;
-  do { idx = Math.floor(Math.random() * PENSAMIENTOS.length); } while (idx === lastPensamiento);
-  lastPensamiento = idx;
-  const bubble = document.getElementById('oscar-bubble');
-  bubble.textContent = PENSAMIENTOS[idx];
-  bubble.classList.remove('show');
-  void bubble.offsetWidth;
-  bubble.classList.add('show');
-}
-
-// ─── FOUND MESSAGES ───
-const FOUND_MSGS = [
-  "Sabía que lo ibas a encontrar. 💌",
-  "¡Eso! Siempre encuentras lo que buscas. ✨",
-  "Te lo mereces todo, Lu. Todo. 🌸",
-  "Otro día, otro detalle tuyo. 🍫",
-  "Así es junio — tuyo, completamente tuyo. 🎀",
-  "Me alegra tanto que hayas encontrado esto. 💛",
-  "¡Sigue buscando mañana! 🔍",
-  "Cada cosa que encuentras la puse pensando en ti. 🌷",
-];
-
-function closeFound() {
-  document.getElementById('found-overlay').classList.remove('show');
-}
-
-// ─── CONFETTI ───
-function launchConfetti() {
-  const canvas = document.getElementById('confetti-canvas');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  const colors = ['#D4537E','#F4C0D1','#BA7517','#FAC775','#3B6D11','#A8D88A','#534AB7','#C5C2F5','#FAEEDA'];
-  const shapes = ['●','★','♥','✦','◆'];
-  const particles = Array.from({length: 120}, () => ({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height - canvas.height,
-    r: Math.random() * 8 + 4,
-    color: colors[Math.floor(Math.random() * colors.length)],
-    shape: shapes[Math.floor(Math.random() * shapes.length)],
-    speed: Math.random() * 4 + 2,
-    swing: Math.random() * 3 - 1.5,
-    angle: Math.random() * 360,
-    spin: Math.random() * 6 - 3,
-    opacity: 1,
-  }));
-
-  let frame = 0;
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach(p => {
-      p.y += p.speed;
-      p.x += p.swing;
-      p.angle += p.spin;
-      if (frame > 80) p.opacity -= 0.015;
-      ctx.save();
-      ctx.globalAlpha = Math.max(0, p.opacity);
-      ctx.font = `${p.r * 2}px serif`;
-      ctx.fillStyle = p.color;
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.angle * Math.PI / 180);
-      ctx.fillText(p.shape, 0, 0);
-      ctx.restore();
-    });
-    frame++;
-    if (frame < 140) requestAnimationFrame(draw);
-    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (state.isAdmin) {
+    document.getElementById('view-admin').style.display = 'block';
+    document.getElementById('m-desc-admin').textContent = d.desc;
+    document.getElementById('m-tip-admin').textContent = d.tip;
+    const pa = document.getElementById('m-pista-admin');
+    if (d.pista) { pa.textContent = d.pista; pa.style.fontStyle='italic'; pa.style.color='var(--tinta)'; }
+    else { pa.textContent = 'Sin pista — toca Editar pista.'; pa.style.fontStyle='normal'; pa.style.color='var(--gris)'; }
+    document.getElementById('pista-input').value = d.pista || '';
+    document.getElementById('edit-titulo').value = d.titulo;
+    document.getElementById('edit-desc').value = d.desc;
+    document.getElementById('edit-tip').value = d.tip;
+    document.getElementById('pista-edit-wrap').classList.remove('open');
+    document.getElementById('edit-section').classList.remove('open');
+    const adb = document.getElementById('admin-done-btn');
+    adb.textContent = d.done ? '✓ Encontrado' : '○ Marcar encontrado';
+    adb.className = 'act-btn' + (d.done ? ' success' : '');
+    // Papelito admin
+    renderPapelitoAdmin(n);
+  } else {
+    document.getElementById('view-lu').style.display = 'block';
+    document.getElementById('m-desc-lu').textContent = d.desc;
+    const pb = document.getElementById('pista-box');
+    if (d.pista) { pb.style.display='block'; document.getElementById('m-pista').textContent = d.pista; }
+    else { pb.style.display = 'none'; }
+    const lb = document.getElementById('lu-done-btn');
+    lb.textContent = d.done ? '✓ ¡Ya lo encontré!' : '○ Marcar como encontrado';
+    lb.className = 'act-btn' + (d.done ? ' success' : '');
+    // Razones btn
+    const existBtn = document.getElementById('razones-trigger-btn');
+    if (existBtn) existBtn.remove();
+    if (d.tieneRazones) {
+      const rBtn = document.createElement('button');
+      rBtn.id = 'razones-trigger-btn';
+      rBtn.className = 'ver-lista-btn';
+      rBtn.innerHTML = '✨ Ver las 10 razones';
+      rBtn.addEventListener('click', () => document.getElementById('razones-overlay').classList.add('open'));
+      document.getElementById('lu-actions').appendChild(rBtn);
+    }
+    // Papelito Lu
+    if (n >= 13) renderPapelitoLu(n);
+    else document.getElementById('papelito-inject').innerHTML = '';
   }
-  draw();
+  document.getElementById('modal-overlay').classList.add('open');
 }
 
-// ─── OVERRIDE toggleDone to add celebration ───
-function cerrarCuaderno() {
-  document.getElementById('cuaderno-overlay').style.display = 'none';
+function cerrarModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  state.current = null;
 }
 
-const _originalToggleDone = toggleDone;
+// ── PAPELITOS ───────────────────────────────────────────────────────────
+function renderPapelitoLu(n) {
+  const d = state.dias.find(x => x.n === n);
+  const pi = document.getElementById('papelito-inject');
+  const luSaved = d.papelito_lu;
+  const oscarSaved = d.papelito_oscar;
+
+  pi.innerHTML = `
+    <div class="papelito-wrap">
+      <div class="papelito-tabs">
+        <button class="p-tab active" id="ptab-lu-${n}" onclick="switchPTab(${n},'lu')">💌 Mi papelito</button>
+        <button class="p-tab" id="ptab-oscar-${n}" onclick="switchPTab(${n},'oscar')">✉️ Papelito de Oscar</button>
+      </div>
+      <div class="p-panel active" id="ppanel-lu-${n}">
+        ${luSaved
+          ? `<div class="p-card"><div class="p-autor">✍️ LU</div><div class="p-saved">${luSaved}</div></div>`
+          : `<div class="p-card"><div class="p-autor">✍️ LU</div><textarea class="p-textarea" id="ptxt-lu-${n}" placeholder="Escribe algo para Oscar... puede ser lo que sea." maxlength="400"></textarea></div><button class="p-save-btn" onclick="guardarPapelito(${n},'lu')">Guardar para Oscar 💌</button>`
+        }
+      </div>
+      <div class="p-panel" id="ppanel-oscar-${n}">
+        ${oscarSaved && luSaved
+          ? `<div class="p-card"><div class="p-autor">✍️ OSCAR</div><div class="p-saved">${oscarSaved}</div></div>`
+          : `<div class="p-card p-locked"><span style="font-size:24px">${luSaved ? '⏳' : '🔒'}</span><span>${luSaved ? 'Oscar aún no ha escrito' : 'Escribe tu papelito primero'}</span></div>`
+        }
+      </div>
+    </div>`;
+}
+
+function renderPapelitoAdmin(n) {
+  if (n < 13) { document.getElementById('papelito-admin-inject').innerHTML = ''; return; }
+  const d = state.dias.find(x => x.n === n);
+  const pi = document.getElementById('papelito-admin-inject');
+  const oscarSaved = d.papelito_oscar;
+  const luSaved = d.papelito_lu;
+
+  pi.innerHTML = `
+    <div class="papelito-wrap" style="border-top:.5px solid var(--papel-oscuro);padding:1rem 1.5rem .5rem;margin-top:8px">
+      <div style="font-size:11px;color:var(--rosa);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px">✉️ Tu papelito (Oscar)</div>
+      ${oscarSaved
+        ? `<div class="p-card"><div class="p-saved">${oscarSaved}</div></div>`
+        : `<div class="p-card"><textarea class="p-textarea" id="ptxt-oscar-${n}" placeholder="Escribe algo para Lu... solo ella lo verá cuando los dos hayan escrito." maxlength="400"></textarea></div><button class="p-save-btn" onclick="guardarPapelito(${n},'oscar')">Guardar para Lu 💌</button>`
+      }
+      ${luSaved ? `<div style="margin-top:10px;font-size:11px;color:var(--verde)">✓ Lu ya escribió su papelito</div>` : `<div style="margin-top:10px;font-size:11px;color:var(--gris)">⏳ Lu aún no ha escrito</div>`}
+    </div>`;
+}
+
+function switchPTab(n, who) {
+  ['lu','oscar'].forEach(w => {
+    const tab = document.getElementById('ptab-'+w+'-'+n);
+    const panel = document.getElementById('ppanel-'+w+'-'+n);
+    if(tab) tab.classList.toggle('active', w===who);
+    if(panel) panel.classList.toggle('active', w===who);
+  });
+}
+
+async function guardarPapelito(n, who) {
+  const txt = document.getElementById('ptxt-'+who+'-'+n)?.value?.trim();
+  if (!txt) return;
+  const btn = document.querySelector('.p-save-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Guardando...'; }
+  const d = state.dias.find(x => x.n === n);
+  d['papelito_'+who] = txt;
+  guardarDatos();
+  await syncToCloud();
+  abrirModal(n);
+}
+
+// ── DONE ────────────────────────────────────────────────────────────────
 function toggleDone() {
   const d = state.dias.find(x => x.n === state.current);
   const wasNotDone = !d.done;
   d.done = !d.done;
   guardarDatos();
+  syncToCloud();
   renderCalendario();
   abrirModal(state.current);
-
   if (wasNotDone) {
-    syncToGitHub(); // sync al marcar encontrado
-    closeModal();
-    // Días 13 y 14 — tarea cuaderno
-    if ((d.n === 13 || d.n === 14) && TAREAS_CUADERNO[d.n]) {
-      const t = TAREAS_CUADERNO[d.n];
-      document.getElementById('tarea-emoji').textContent = t.emoji;
-      document.getElementById('tarea-title').textContent = t.title;
-      document.getElementById('tarea-msg').textContent = t.msg;
-      document.getElementById('tarea-overlay').classList.add('open');
-      return;
-    }
-    // Día 2 especial — mostrar reglas del cuaderno primero
-    if (d.n === 2) {
-      document.getElementById('cuaderno-overlay').style.display = 'flex';
-      return;
-    }
-    // Resto de días — celebración normal
+    cerrarModal();
     launchConfetti();
-    const msgs = FOUND_MSGS;
-    const msg = msgs[Math.floor(Math.random() * msgs.length)];
-    const t = TIPOS[d.tipo];
-    document.getElementById('found-emoji').textContent = t.icon;
-    document.getElementById('found-title').textContent = '¡Lo encontraste! ' + t.icon;
-    document.getElementById('found-msg').textContent = msg;
+    const msgs = ['Sabía que lo ibas a encontrar. 💌','¡Eso! Siempre encuentras lo que buscas. ✨','Te lo mereces todo, Lu. 🌸','Otro día, otro detalle tuyo. 🍫','Así es junio — tuyo, completamente tuyo. 🎀'];
+    document.getElementById('found-emoji').textContent = TIPOS[d.tipo].icon;
+    document.getElementById('found-title').textContent = '¡Lo encontraste! ' + TIPOS[d.tipo].icon;
+    document.getElementById('found-msg').textContent = msgs[Math.floor(Math.random()*msgs.length)];
     document.getElementById('found-overlay').classList.add('show');
   }
 }
 
-
-// ─── SPOTIFY SECRET ───
-const SPOTIFY_ANSWER = 'me hace falta';
-let spotifyUnlocked = localStorage.getItem('spotify_unlocked') === 'true';
-
-function mostrarSpotifyBtn() {
-  document.getElementById('spotify-btn').style.display = 'block';
-}
-
-function abrirSpotify() {
-  document.getElementById('spotify-overlay').classList.add('open');
-  if (spotifyUnlocked) {
-    document.getElementById('spotify-locked').classList.add('hide');
-    document.getElementById('spotify-unlocked').classList.add('show');
+// ── ADMIN ────────────────────────────────────────────────────────────────
+function toggleAdmin() {
+  if (state.isAdmin) {
+    state.isAdmin = false; localStorage.setItem(ADMIN_KEY, 'false');
   } else {
-    document.getElementById('spotify-answer').value = '';
-    document.getElementById('spotify-error').classList.remove('show');
+    const p = prompt('Contraseña:');
+    if (p === 'oscar2026') { state.isAdmin = true; localStorage.setItem(ADMIN_KEY, 'true'); }
+    else if (p !== null) { alert('Incorrecta'); return; }
+    else return;
   }
+  renderCalendario();
+  const badge = document.getElementById('mode-badge');
+  const fab = document.getElementById('admin-fab');
+  if (state.isAdmin) { badge.textContent='Admin ⚙️'; badge.className='mode-badge admin'; fab.textContent='🔓'; }
+  else { badge.textContent='Lu 🌸'; badge.className='mode-badge lu'; fab.textContent='⚙️'; }
 }
 
-function cerrarSpotify() {
-  document.getElementById('spotify-overlay').classList.remove('open');
-}
-
-function verificarSpotify() {
-  const answer = document.getElementById('spotify-answer').value.trim().toLowerCase();
-  if (answer === SPOTIFY_ANSWER) {
-    spotifyUnlocked = true;
-    localStorage.setItem('spotify_unlocked', 'true');
-    document.getElementById('spotify-locked').classList.add('hide');
-    document.getElementById('spotify-unlocked').classList.add('show');
-  } else {
-    document.getElementById('spotify-error').classList.add('show');
-    document.getElementById('spotify-answer').style.borderColor = '#D4537E';
-    setTimeout(() => {
-      document.getElementById('spotify-answer').style.borderColor = '';
-    }, 1000);
+// ── CONFETTI ─────────────────────────────────────────────────────────────
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  const colors = ['#D4537E','#F4C0D1','#BA7517','#FAC775','#3B6D11','#A8D88A','#534AB7'];
+  const shapes = ['●','★','♥','✦','◆'];
+  const particles = Array.from({length:100}, () => ({x:Math.random()*canvas.width,y:Math.random()*canvas.height-canvas.height,r:Math.random()*8+4,color:colors[Math.floor(Math.random()*colors.length)],shape:shapes[Math.floor(Math.random()*shapes.length)],speed:Math.random()*4+2,swing:Math.random()*3-1.5,angle:Math.random()*360,spin:Math.random()*6-3,opacity:1}));
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p => { p.y+=p.speed; p.x+=p.swing; p.angle+=p.spin; if(frame>80)p.opacity-=.015; ctx.save(); ctx.globalAlpha=Math.max(0,p.opacity); ctx.font=`${p.r*2}px serif`; ctx.fillStyle=p.color; ctx.translate(p.x,p.y); ctx.rotate(p.angle*Math.PI/180); ctx.fillText(p.shape,0,0); ctx.restore(); });
+    frame++;
+    if(frame<140) requestAnimationFrame(draw);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
   }
+  draw();
 }
 
-document.getElementById('spotify-answer')?.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') verificarSpotify();
-});
-
-document.getElementById('spotify-overlay')?.addEventListener('click', function(e) {
-  if (e.target === this) cerrarSpotify();
-});
-
-
-// ─── 10 RAZONES ───
-function abrirRazones() {
-  document.getElementById('razones-overlay').classList.add('open');
-}
-function cerrarRazones() {
-  document.getElementById('razones-overlay').classList.remove('open');
-}
-document.getElementById('razones-overlay')?.addEventListener('click', function(e) {
-  if (e.target === this) cerrarRazones();
-});
-
-
-// ─── TAREA CUADERNO DÍAS 13 Y 14 ───
-const TAREAS_CUADERNO = {
-  13: {
-    emoji: '✍️',
-    title: '¡Hoja escrita!',
-    msg: 'Eso que escribiste toma valentía. Gracias por hacerlo, por no guardarlo, por decirlo aunque sea en letras. Ese cuaderno ahora tiene algo muy tuyo.'
-  },
-  14: {
-    emoji: '🤝',
-    title: '¡Promesas escritas!',
-    msg: 'Lo que escribiste en esa hoja importa mucho. Cada límite, cada promesa, cada regla que pusiste ahí viene de un lugar honesto. Eso construye algo sólido.'
-  }
-};
-
-function cerrarTarea() {
-  document.getElementById('tarea-overlay').classList.remove('open');
-}
-document.getElementById('tarea-overlay')?.addEventListener('click', function(e) {
-  if (e.target === this) cerrarTarea();
-});
-
-
-// ── PAPELITOS INTERACTIVOS ──
-const PAPELITO_START_DAY = 13;
-
-function mostrarPapelitos(n) {
-  if (n < PAPELITO_START_DAY) return '';
-  return `
-    <div class="papelito-section">
-      <div class="papelito-tabs">
-        <button class="papelito-tab active" onclick="switchTab(${n},'lu')" id="tab-lu-${n}">💌 Mi papelito</button>
-        <button class="papelito-tab" onclick="switchTab(${n},'oscar')" id="tab-oscar-${n}">✉️ Papelito de Oscar</button>
-      </div>
-      <div class="papelito-panel active" id="panel-lu-${n}">
-        <div id="papelito-lu-content-${n}"></div>
-      </div>
-      <div class="papelito-panel" id="panel-oscar-${n}">
-        <div id="papelito-oscar-content-${n}"></div>
-      </div>
-    </div>`;
+// ── OSCAR THOUGHTS ───────────────────────────────────────────────────────
+const PENSAMIENTOS = ['En este momento estoy pensando en cómo te ves cuando te ríes sin querer.','Estoy pensando que ojalá puedas sentir lo mucho que te quiero a través de la pantalla.','Estoy pensando en la primera vez que me di cuenta que me gustabas.','Pienso que eres la persona más bonita que conozco, por dentro y por fuera.','Estoy pensando en que me alegra cada día que estás en mi vida.','En este momento pienso: qué suerte la mía.','Estoy pensando en cómo hueles cuando te abrazo.','Pienso que no sé cómo era mi vida antes de ti, y tampoco quiero saberlo.','Estoy pensando que te mereces todo lo bueno del mundo, y más.','Pienso en tu cara cuando algo te da mucho gusto — es mi favorita.','Estoy pensando en ti. Así de simple.','Pienso que el mejor momento de mi día es cuando estás cerca.','Pienso que te quiero hoy más que ayer, y menos que mañana.','Estoy pensando en darte un abrazo muy largo cuando te vea.','Pienso en ti. Siempre. Todo el tiempo. Ahorita también.'];
+let lastP = -1;
+function pensarOscar() {
+  let idx; do { idx = Math.floor(Math.random()*PENSAMIENTOS.length); } while(idx===lastP);
+  lastP = idx;
+  const b = document.getElementById('oscar-bubble');
+  b.textContent = PENSAMIENTOS[idx];
+  b.classList.remove('show'); void b.offsetWidth; b.classList.add('show');
 }
 
-function switchTab(n, who) {
-  ['lu','oscar'].forEach(w => {
-    document.getElementById('tab-'+w+'-'+n)?.classList.toggle('active', w===who);
-    document.getElementById('panel-'+w+'-'+n)?.classList.toggle('active', w===who);
-  });
-}
-
-function renderPapelito(n, who) {
-  const key = 'papelito_' + n + '_' + who;
-  const keyOther = 'papelito_' + n + (who==='lu'?'_oscar':'_lu');
-  const d = state.dias.find(x=>x.n===n);
-  const saved = d?.[key];
-  const otherSaved = d?.[keyOther];
-  const isLu = who === 'lu';
-  const label = isLu ? '✍️ Lu' : '✍️ Oscar';
-  const placeholder = isLu
-    ? 'Escribe algo para Oscar... puede ser lo que sea.'
-    : 'El papelito de Oscar aparecerá cuando los dos hayan escrito.';
-  const containerId = 'papelito-' + who + '-content-' + n;
-  const el = document.getElementById(containerId);
-  if (!el) return;
-
-  if (saved) {
-    // Already saved — show text
-    el.innerHTML = `
-      <div class="papelito-card">
-        <div class="papelito-autor">${label}</div>
-        <div class="papelito-saved-text">${saved}</div>
-      </div>`;
-  } else if (!isLu && !otherSaved) {
-    // Oscar's papelito — Lu hasn't written yet
-    el.innerHTML = `
-      <div class="papelito-card locked-card">
-        <span style="font-size:20px">🔒</span>
-        <span>Escribe tu papelito primero</span>
-      </div>`;
-  } else if (!isLu && otherSaved) {
-    // Lu wrote, Oscar hasn't — show locked
-    el.innerHTML = `
-      <div class="papelito-card locked-card">
-        <span style="font-size:20px">⏳</span>
-        <span>Oscar aún no ha escrito — vuelve pronto</span>
-      </div>`;
-  } else {
-    // Lu's panel — can write
-    el.innerHTML = `
-      <div class="papelito-card">
-        <div class="papelito-autor">${label}</div>
-        <textarea class="papelito-textarea" id="txt-${who}-${n}" placeholder="${placeholder}" maxlength="300"></textarea>
-      </div>
-      <button class="papelito-save-btn" onclick="guardarPapelito(${n},'${who}')">Guardar para Oscar 💌</button>`;
-  }
-}
-
-async function guardarPapelito(n, who) {
-  const txt = document.getElementById('txt-'+who+'-'+n)?.value?.trim();
-  if (!txt) return;
-  const btn = document.querySelector('.papelito-save-btn');
-  if (btn) { btn.disabled = true; btn.textContent = 'Guardando...'; }
-
-  const d = state.dias.find(x=>x.n===n);
-  const key = 'papelito_' + n + '_' + who;
-  d[key] = txt;
-  guardarDatos();
-  await syncToGitHub();
-
-  renderPapelito(n, who);
-  renderPapelito(n, who==='lu'?'oscar':'lu');
-}
-
-function renderTodosPapelitos(n) {
-  renderPapelito(n, 'lu');
-  renderPapelito(n, 'oscar');
-}
-
-</script>
-
-<canvas id="confetti-canvas"></canvas>
-
-<div class="found-overlay" id="found-overlay">
-  <div class="found-card">
-    <div class="found-emoji" id="found-emoji">🎉</div>
-    <div class="found-title" id="found-title">¡Lo encontraste!</div>
-    <div class="found-msg" id="found-msg"></div>
-    <button class="found-close" onclick="closeFound()">Seguir ✨</button>
-  </div>
-</div>
-
-
-<!-- Actualizado: 2026-06-02 16:55 -->
-<!-- MODAL ESPECIAL DÍA 2 — REGLAS DEL CUADERNO -->
-<div class="modal-overlay" id="cuaderno-overlay" style="display:none;z-index:250">
-  <div class="modal-card" style="max-width:380px;margin-top:2rem">
-    <div class="modal-header" style="background:linear-gradient(135deg,#FBEAF0,#FAEEDA);border-bottom:none;padding:1.75rem 1.5rem 1.25rem">
-      <div style="font-size:36px;text-align:center;margin-bottom:10px">📓</div>
-      <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:400;color:#1A1014;text-align:center;line-height:1.3">Las reglas de<br><em style="color:#D4537E">nuestro cuaderno</em></div>
-      <div style="font-size:12px;color:#8A7F7A;text-align:center;margin-top:6px">Un baúl de cositas para los dos 🗝️</div>
-    </div>
-    <div class="modal-body" style="padding:1.25rem 1.5rem">
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <div style="display:flex;gap:12px;align-items:flex-start;background:white;border:.5px solid #F4C0D1;border-radius:12px;padding:12px 14px">
-          <span style="font-size:20px;flex-shrink:0">📌</span>
-          <span style="font-size:13px;color:#1A1014;line-height:1.6">Coloca los <strong>PostIts</strong> dentro — cada uno que encuentres tiene su lugar aquí.</span>
-        </div>
-        <div style="display:flex;gap:12px;align-items:flex-start;background:white;border:.5px solid #F4C0D1;border-radius:12px;padding:12px 14px">
-          <span style="font-size:20px;flex-shrink:0">✍️</span>
-          <span style="font-size:13px;color:#1A1014;line-height:1.6">Escribe lo que sea, <strong>lo que nazca</strong> — sin filtros, sin reglas de redacción.</span>
-        </div>
-        <div style="display:flex;gap:12px;align-items:flex-start;background:white;border:.5px solid #F4C0D1;border-radius:12px;padding:12px 14px">
-          <span style="font-size:20px;flex-shrink:0">🏴‍☠️</span>
-          <span style="font-size:13px;color:#1A1014;line-height:1.6">Habrá <strong>días del Tesoro</strong> donde tendrás que escribir cositas — hazlo tuyo, no importa cómo, cualquier hoja vale.</span>
-        </div>
-        <div style="display:flex;gap:12px;align-items:flex-start;background:white;border:.5px solid #F4C0D1;border-radius:12px;padding:12px 14px">
-          <span style="font-size:20px;flex-shrink:0">🎨</span>
-          <span style="font-size:13px;color:#1A1014;line-height:1.6">Puedes <strong>pegar cositas</strong> en todo el cuaderno — envolturas, flores, fotos, lo que quieras.</span>
-        </div>
-      </div>
-    </div>
-    <div class="modal-actions" style="justify-content:center;padding-bottom:1.5rem">
-      <button class="act-btn primary" onclick="cerrarCuaderno()" style="padding:10px 32px;font-size:13px">¡Entendido! 💛</button>
-    </div>
-  </div>
-</div>
-
-
-<!-- SPOTIFY SECRET BUTTON -->
-<button class="spotify-secret" onclick="abrirSpotify()" id="spotify-btn" title="Playlist Spotify" style="display:none">
-  <svg viewBox="0 0 24 24" fill="#1DB954" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-  </svg>
-</button>
-
-<!-- SPOTIFY MODAL -->
-<div class="spotify-overlay" id="spotify-overlay">
-  <div class="spotify-card">
-    <img class="spotify-photo" src="/foto.png" alt="Oscar y Lu">
-    <div class="spotify-body">
-      <!-- LOCKED -->
-      <div class="spotify-locked" id="spotify-locked">
-        <div class="spotify-title">🎵 Desbloquea nuestra canción</div>
-        <div class="spotify-sub">¿Nombre que desbloquea nuestra canción?</div>
-        <div class="spotify-input-wrap">
-          <input class="spotify-input" id="spotify-answer" type="text" placeholder="Escribe la respuesta..." autocomplete="off">
-          <div class="spotify-error" id="spotify-error">Esa no es la respuesta 💔 Piénsalo bien...</div>
-        </div>
-        <div class="spotify-actions">
-          <button class="spotify-cancel" onclick="cerrarSpotify()">Cancelar</button>
-          <button class="spotify-unlock" onclick="verificarSpotify()">Desbloquear 🔓</button>
-        </div>
-      </div>
-      <!-- UNLOCKED -->
-      <div class="spotify-unlocked" id="spotify-unlocked">
-        <div class="spotify-song">Nuestra canción 🎶</div>
-        <div class="spotify-sub" style="margin-bottom:16px">Escanea el código o toca el botón para escucharla</div>
-        <div style="background:#191414;border-radius:16px;padding:20px;margin-bottom:8px;display:flex;align-items:center;gap:14px">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-        <div style="text-align:left">
-          <div style="color:white;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif">Nuestra playlist</div>
-          <div style="color:#B3B3B3;font-size:11px;font-family:'DM Sans',sans-serif">Toca para escuchar 🎵</div>
-        </div>
-      </div>
-        <br>
-        <a class="spotify-open-btn" href="https://open.spotify.com/playlist/7ICimnl3FltG5wz95aPW1a?si=UTOCI61TQIKbPnJ3UhUSEA" target="_blank">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-          Abrir en Spotify
-        </a>
-        <br><br>
-        <button class="spotify-cancel" onclick="cerrarSpotify()">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- MODAL 10 RAZONES DÍA 12 -->
-<div class="razones-overlay" id="razones-overlay">
-  <div class="razones-card">
-    <div class="razones-header">
-      <div class="razones-header-num">10</div>
-      <div class="razones-header-title">razones por las que<br>me alegra que existas</div>
-      <div class="razones-header-sub">— Escrito con el corazón, para ti —</div>
-    </div>
-    <div class="razones-body" id="razones-body">
-      <div class="razon-item" style="animation-delay:.05s">
-        <div class="razon-num">1</div>
-        <div class="razon-content">
-          <div class="razon-title">Tus ojos</div>
-          <div class="razon-desc">Hay un universo entero en ellos. Me pierdo cada vez que te miro.</div>
-        </div>
-      </div>
-      <div class="razon-item" style="animation-delay:.1s">
-        <div class="razon-num">2</div>
-        <div class="razon-content">
-          <div class="razon-title">Tu energía</div>
-          <div class="razon-desc">Entras a un lugar y lo cambias. Nunca pasa desapercibida.</div>
-        </div>
-      </div>
-      <div class="razon-item" style="animation-delay:.15s">
-        <div class="razon-num">3</div>
-        <div class="razon-content">
-          <div class="razon-title">Tu esencia</div>
-          <div class="razon-desc">Hay algo en ti que no se puede describir, solo se siente. Y me encanta sentirlo.</div>
-        </div>
-      </div>
-      <div class="razon-item" style="animation-delay:.2s">
-        <div class="razon-num">4</div>
-        <div class="razon-content">
-          <div class="razon-title">Todo lo que aportas a mi vida</div>
-          <div class="razon-desc">Desde que estás, todo tiene más color, más sentido, más sabor.</div>
-        </div>
-      </div>
-      <div class="razon-item" style="animation-delay:.25s">
-        <div class="razon-num">5</div>
-        <div class="razon-content">
-          <div class="razon-title">Eres la mejor doctora que conozco</div>
-          <div class="razon-desc">Tu vocación me enamora. Cuidas a todos con una entrega que me llena de orgullo.</div>
-        </div>
-      </div>
-      <div class="razon-item" style="animation-delay:.3s">
-        <div class="razon-num">6</div>
-        <div class="razon-content">
-          <div class="razon-title">Tu sencillez</div>
-          <div class="razon-desc">No necesitas nada para brillar. Eres extraordinaria siendo tú.</div>
-        </div>
-      </div>
-      <div class="razon-item" style="animation-delay:.35s">
-        <div class="razon-num">7</div>
-        <div class="razon-content">
-          <div class="razon-title">Tu voz súper hermosa</div>
-          <div class="razon-desc">Podría escucharte hablar para siempre. Cada palabra tuya me llega diferente.</div>
-        </div>
-      </div>
-      <div class="razon-item" style="animation-delay:.4s">
-        <div class="razon-num">8</div>
-        <div class="razon-content">
-          <div class="razon-title">Tu cuerpo súper sexi</div>
-          <div class="razon-desc">Me robas el aliento. Siempre. Sin esfuerzo. Solo siendo tú.</div>
-        </div>
-      </div>
-      <div class="razon-item" style="animation-delay:.45s">
-        <div class="razon-num">9</div>
-        <div class="razon-content">
-          <div class="razon-title">Tu cabello hermoso</div>
-          <div class="razon-desc">Es parte de tu magia. Me encanta verlo, me encanta cuando lo sueltas.</div>
-        </div>
-      </div>
-      <div class="razon-item" style="animation-delay:.5s">
-        <div class="razon-num">10</div>
-        <div class="razon-content">
-          <div class="razon-title">Tu mente e inteligencia me enamoran</div>
-          <div class="razon-desc">Hablar contigo es mi parte favorita del día. Me inspiras, me retas, me enamoras.</div>
-        </div>
-      </div>
-    </div>
-    <div class="razones-footer">
-      <button class="razones-close-btn" onclick="cerrarRazones()">Guardar en mi corazón 💛</button>
-    </div>
-  </div>
-</div>
-
-
-<!-- MODAL TAREA CUADERNO DÍAS 13 Y 14 -->
-<div class="tarea-overlay" id="tarea-overlay">
-  <div class="tarea-card">
-    <div class="tarea-header">
-      <div class="tarea-emoji" id="tarea-emoji">📓</div>
-      <div class="tarea-title" id="tarea-title"></div>
-      <div class="tarea-msg" id="tarea-msg"></div>
-    </div>
-    <div class="tarea-recordatorio">
-      <strong>📅 Recuerda</strong>
-      El lunes tienes que darle el cuaderno a Oscar para que él escriba lo suyo. Es un ejercicio para los dos. 💛
-    </div>
-    <div class="tarea-footer">
-      <button class="tarea-close" onclick="cerrarTarea()">Entendido 💛</button>
-    </div>
-  </div>
-</div>
-
-
-<script>
+// ── EVENT LISTENERS ──────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
-  var b1 = document.getElementById('btn-continuar');
-  var b2 = document.getElementById('btn-entrar');
-  if (b1) {
-    b1.addEventListener('click', function() {
-      document.getElementById('screen1').style.display = 'none';
-      var s2 = document.getElementById('screen2');
-      s2.style.display = 'flex';
-      s2.style.flexDirection = 'column';
-      s2.style.alignItems = 'center';
-      s2.style.justifyContent = 'center';
-      s2.style.minHeight = '100vh';
-      s2.style.padding = '2.5rem 1.5rem';
-      s2.style.textAlign = 'center';
-      window.scrollTo(0, 0);
-    });
-  }
-  if (b2) {
-    b2.addEventListener('click', function() {
-      var ov = document.createElement('div');
-      ov.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#2D1F2E;opacity:0;transition:opacity .5s;';
-      ov.innerHTML = '<div style="font-size:52px;margin-bottom:12px">🕯️</div><p style="color:#F5EEF8;font-family:serif;font-style:italic;font-size:16px">Entrando...</p>';
-      document.body.appendChild(ov);
-      setTimeout(function(){ ov.style.opacity = '1'; }, 20);
-      setTimeout(function(){
-        // Mostrar app
-        document.getElementById('portada').style.display = 'none';
-        var app = document.getElementById('app');
-        app.classList.add('visible');
-        document.getElementById('admin-fab-wrap').classList.add('visible');
-        document.body.classList.add('dark-mode');
-        // Esperar un frame para que el DOM actualice, luego renderizar
-        requestAnimationFrame(function() {
-          requestAnimationFrame(function() {
-            renderCalendario();
-            actualizarBadge();
-            loadRemoteData();
-            mostrarSpotifyBtn();
-          });
-        });
-      }, 600);
-      setTimeout(function(){
-        ov.style.opacity = '0';
-        setTimeout(function(){ ov.remove(); }, 500);
-      }, 1400);
-    });
-  }
+  // Screen navigation
+  document.getElementById('btn-s1').addEventListener('click', function() {
+    document.getElementById('screen1').classList.remove('active');
+    document.getElementById('screen2').classList.add('active');
+    window.scrollTo(0,0);
+  });
+
+  document.getElementById('btn-s2').addEventListener('click', function() {
+    var ov = document.getElementById('overlay-transition');
+    ov.classList.add('show');
+    setTimeout(function() {
+      document.getElementById('screen2').classList.remove('active');
+      document.getElementById('app').classList.add('visible');
+      document.getElementById('admin-fab-wrap').classList.add('visible');
+      document.getElementById('spotify-btn').style.display = 'block';
+      document.body.classList.add('dark');
+      renderCalendario();
+      actualizarBadge();
+      loadRemoteData();
+    }, 700);
+    setTimeout(function() {
+      ov.classList.remove('show');
+    }, 1400);
+  });
+
+  // Reglas
+  document.getElementById('btn-reglas').addEventListener('click', function() {
+    document.getElementById('app').classList.remove('visible');
+    document.getElementById('screen2').classList.add('active');
+  });
+
+  // Modal close
+  document.getElementById('modal-close-btn').addEventListener('click', cerrarModal);
+  document.getElementById('modal-overlay').addEventListener('click', function(e) { if(e.target===this) cerrarModal(); });
+
+  // Done btn
+  document.getElementById('lu-done-btn').addEventListener('click', toggleDone);
+  document.getElementById('admin-done-btn').addEventListener('click', toggleDone);
+
+  // Oscar thoughts
+  document.getElementById('oscar-btn').addEventListener('click', pensarOscar);
+
+  // Admin
+  document.getElementById('admin-fab').addEventListener('click', toggleAdmin);
+
+  // Edit buttons
+  document.getElementById('btn-pista-edit').addEventListener('click', function() { document.getElementById('pista-edit-wrap').classList.toggle('open'); });
+  document.getElementById('btn-day-edit').addEventListener('click', function() { document.getElementById('edit-section').classList.toggle('open'); });
+  document.getElementById('btn-guardar').addEventListener('click', function() {
+    const d = state.dias.find(x => x.n === state.current);
+    const t = document.getElementById('edit-titulo').value.trim();
+    const dc = document.getElementById('edit-desc').value.trim();
+    const tp = document.getElementById('edit-tip').value.trim();
+    const p = document.getElementById('pista-input').value.trim();
+    if(t) d.titulo=t; if(dc) d.desc=dc; if(tp) d.tip=tp; d.pista=p;
+    guardarDatos(); syncToCloud(); renderCalendario(); abrirModal(state.current);
+    document.getElementById('edit-section').classList.remove('open');
+    document.getElementById('pista-edit-wrap').classList.remove('open');
+  });
+
+  // Found overlay
+  document.getElementById('found-close-btn').addEventListener('click', function() { document.getElementById('found-overlay').classList.remove('show'); });
+
+  // Razones
+  document.getElementById('razones-close-btn').addEventListener('click', function() { document.getElementById('razones-overlay').classList.remove('open'); });
+  document.getElementById('razones-overlay').addEventListener('click', function(e) { if(e.target===this) this.classList.remove('open'); });
+
+  // Spotify
+  document.getElementById('spotify-btn').addEventListener('click', function() {
+    window.open('https://open.spotify.com/playlist/7ICimnl3FltG5wz95aPW1a?si=UTOCI61TQIKbPnJ3UhUSEA','_blank');
+  });
 });
+
+function actualizarBadge() {
+  const badge = document.getElementById('mode-badge');
+  const fab = document.getElementById('admin-fab');
+  if (state.isAdmin) { badge.textContent='Admin ⚙️'; badge.className='mode-badge admin'; if(fab) fab.textContent='🔓'; }
+  else { badge.textContent='Lu 🌸'; badge.className='mode-badge lu'; if(fab) fab.textContent='⚙️'; }
+}
 </script>
 </body>
 </html>
